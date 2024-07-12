@@ -1,14 +1,11 @@
 
-
-
-
 export default class D20Roll extends Roll {
     constructor(formula, data, options) {
         super(formula, data, options);
-        if ( !((this.terms[0] instanceof Die) && (this.terms[0].faces === 20)) ) {
-          throw new Error(`Invalid D20Roll formula provided ${this._formula}`);
+        if (!((this.terms[0] instanceof Die) && (this.terms[0].faces === 20))) {
+            throw new Error(`Invalid D20Roll formula provided ${this._formula}`);
         }
-      }
+    }
 
 
     /**
@@ -40,15 +37,15 @@ export default class D20Roll extends Roll {
     }
 
     /** @inheritdoc */
-    async toMessage(messageData={}, options={}) {
+    async toMessage(messageData = {}, options = {}) {
 
         // Evaluate the roll now so we have the results available
-        if ( !this._evaluated ) await this.evaluate({async: true});
+        if (!this._evaluated) await this.evaluate({ async: true });
 
         // Add appropriate advantage mode message flavor and dnd5e roll flags
         messageData.flavor = messageData.flavor || this.options.flavor;
-        if ( this.hasAdvantage ) messageData.flavor += " (Advantage)";
-        else if ( this.hasDisadvantage ) messageData.flavor += " (Disadvantage)";
+        if (this.hasAdvantage) messageData.flavor += " (Advantage)";
+        else if (this.hasDisadvantage) messageData.flavor += " (Disadvantage)";
 
         // Record the preferred rollMode
         options.rollMode = options.rollMode ?? this.options.rollMode;
@@ -68,7 +65,7 @@ export default class D20Roll extends Roll {
      * @param {object} options                  Additional Dialog customization options
      * @returns {Promise<D20Roll|null>}         A resulting D20Roll object constructed with the dialog, or null if the dialog was closed
      */
-    async configureDialog({title, defaultRollMode, defaultAction=D20Roll.ADV_MODE.NORMAL, chooseModifier=false, defaultAbility}={}, options={}) {
+    async configureDialog({ title, defaultRollMode, defaultAction = D20Roll.ADV_MODE.NORMAL, chooseModifier = false, defaultAbility, weaponData = null } = {}, options = {}) {
 
         // Render the Dialog inner HTML
         const content = await renderTemplate(this.constructor.EVALUATION_TEMPLATE, {
@@ -77,7 +74,14 @@ export default class D20Roll extends Roll {
             rollModes: CONFIG.Dice.rollModes,
             chooseModifier,
             defaultAbility,
-            abilities: CONFIG.SGRPG.abilities
+            abilities: CONFIG.SGRPG.abilities,
+            rangeSelection: CONFIG.SGRPG.rangeTypes,
+            tensionSelection: CONFIG.SGRPG.tensionSelection,
+
+            weaponRoll: weaponData?.weaponRoll ?? false,
+            rangeDefault: weaponData?.rangeDefault ?? null,
+            canAddTension: weaponData?.canAddTension ?? false,
+            tensionDefault: weaponData?.tensionDefault ?? null
         });
 
         let defaultButton = "normal";
@@ -88,26 +92,26 @@ export default class D20Roll extends Roll {
 
         // Create the Dialog window and await submission of the form
         return new Promise(resolve => {
-                new Dialog({
-                    title,
-                    content,
-                    buttons: {
+            new Dialog({
+                title,
+                content,
+                buttons: {
                     advantage: {
                         label: "Advantage",
-                        callback: html => resolve(this._onDialogSubmit(html, D20Roll.ADV_MODE.ADVANTAGE))
+                        callback: html => resolve(this._onDialogSubmit(html, D20Roll.ADV_MODE.ADVANTAGE, weaponData))
                     },
                     normal: {
                         label: "Normal",
-                        callback: html => resolve(this._onDialogSubmit(html, D20Roll.ADV_MODE.NORMAL))
+                        callback: html => resolve(this._onDialogSubmit(html, D20Roll.ADV_MODE.NORMAL, weaponData))
                     },
                     disadvantage: {
                         label: "Disadvantage",
-                        callback: html => resolve(this._onDialogSubmit(html, D20Roll.ADV_MODE.DISADVANTAGE))
+                        callback: html => resolve(this._onDialogSubmit(html, D20Roll.ADV_MODE.DISADVANTAGE, weaponData))
                     }
-                    },
-                    default: defaultButton,
-                    close: () => resolve(null)
-                }, options).render(true);
+                },
+                default: defaultButton,
+                close: () => resolve(null)
+            }, options).render(true);
         });
     }
 
@@ -118,20 +122,36 @@ export default class D20Roll extends Roll {
      * @param {number} advantageMode    The chosen advantage mode
      * @private
      */
-    _onDialogSubmit(html, advantageMode) {
+    _onDialogSubmit(html, advantageMode, weaponData) {
         const form = html[0].querySelector("form");
 
         // Append a situational bonus term
-        if ( form.bonus.value ) {
-        const bonus = new Roll(form.bonus.value, this.data);
-        if ( !(bonus.terms[0] instanceof OperatorTerm) ) this.terms.push(new OperatorTerm({operator: "+"}));
+        if (form.bonus.value) {
+            const bonus = new Roll(form.bonus.value, this);
+            if (!(bonus.terms[0] instanceof OperatorTerm)) this.terms.push(new OperatorTerm({ operator: "+" }));
+            this.terms = this.terms.concat(bonus.terms);
+        }
+
+        // Also append a range bonus term
+        if (form.rangeBonus?.value && weaponData?.weaponRange) {
+            const value = form.rangeBonus.value === "short" ? weaponData?.weaponRange?.shortBonus : weaponData?.weaponRange?.longBonus;
+            const bonus = new Roll(value, this);
+            if (!(bonus.terms[0] instanceof OperatorTerm)) this.terms.push(new OperatorTerm({ operator: "+" }));
+            this.terms = this.terms.concat(bonus.terms);
+        }
+
+        // And a tension die bonus
+        if (form.tensionBonus?.value === "yes") {
+            const td = game.sgrpg.getTensionDie();
+            const bonus = new Roll("1" + td, this);
+            if (!(bonus.terms[0] instanceof OperatorTerm)) this.terms.push(new OperatorTerm({ operator: "+" }));
             this.terms = this.terms.concat(bonus.terms);
         }
 
         // Customize the modifier
-        if ( form.ability?.value ) {
-            const abl = this.data.abilities[form.ability.value];
-            this.terms.findSplice(t => t.term === "@mod", new NumericTerm({number: abl.mod}));
+        if (form.ability?.value) {
+            const abl = this.abilities[form.ability.value];
+            this.terms.findSplice(t => t.term === "@mod", new NumericTerm({ number: abl.mod }));
             this.options.flavor += ` (${CONFIG.SGRPG.abilities[form.ability.value]})`;
         }
 
@@ -152,12 +172,12 @@ export default class D20Roll extends Roll {
         d20.modifiers = [];
 
         // Handle Advantage or Disadvantage
-        if ( this.hasAdvantage ) {
+        if (this.hasAdvantage) {
             d20.number = 2;
             d20.modifiers.push("kh");
             d20.options.advantage = true;
         }
-        else if ( this.hasDisadvantage ) {
+        else if (this.hasDisadvantage) {
             d20.number = 2;
             d20.modifiers.push("kl");
             d20.options.disadvantage = true;
@@ -167,9 +187,9 @@ export default class D20Roll extends Roll {
         }
 
         // Assign critical and fumble thresholds
-        if ( this.options.critical ) d20.options.critical = this.options.critical;
-        if ( this.options.fumble ) d20.options.fumble = this.options.fumble;
-        if ( this.options.targetValue ) d20.options.target = this.options.targetValue;
+        if (this.options.critical) d20.options.critical = this.options.critical;
+        if (this.options.fumble) d20.options.fumble = this.options.fumble;
+        if (this.options.targetValue) d20.options.target = this.options.targetValue;
 
         // Re-compile the underlying formula
         this._formula = this.constructor.getFormula(this.terms);

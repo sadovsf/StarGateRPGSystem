@@ -138,6 +138,13 @@
     background-image: url("../../../icons/svg/d20-black.svg") !important;
 }
 
+.sgrpg .flex-center-image {
+    justify-content: center;
+    vertical-align: middle;
+    padding: 5px 2px;
+    margin-left: 2px;
+}
+
 .sgrpg .bulk-status {
     flex: 0 0 12px;
     background: #7a7971;

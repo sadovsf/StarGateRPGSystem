@@ -1,289 +1,304 @@
 {
-    "Actor": {
-        "types": [ "player", "vehicle", "npc" ],
-        "templates": {
-            "common": {
-                "health": {
-                    "value": 20,
-                    "max": 20
-                },
-                "temp_health": {
-                    "value": 0,
-                    "max": 0
-                },
-
-                "determination": {
-                    "value": 2,
-                    "max": 2
-                },
-
-                "condition": "normal",
-                "prof": 2,
-                "initiative": 0,
-                "moxie": 0,
-                "bulk": 16,
-                "ac": 10,
-                "speed": 6,
-
-                "deathSaves": {
-                    "sucesses": 0,
-                    "fails": 0
-                },
-
-                "attributes": {
-                    "str": {
-                        "value": 10,
-                        "mod": "+0"
-                    },
-                    "dex": {
-                        "value": 10,
-                        "mod": "+0"
-                    },
-                    "con": {
-                        "value": 10,
-                        "mod": "+0"
-                    },
-                    "int": {
-                        "value": 10,
-                        "mod": "+0"
-                    },
-                    "wis": {
-                        "value": 10,
-                        "mod": "+0"
-                    },
-                    "cha": {
-                        "value": 10,
-                        "mod": "+0"
-                    }
-                },
-
-                "skills": {
-                    "acrobatics": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "dex"
-                    },
-                    "animalhandling": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "wis"
-                    },
-                    "athletics": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "str"
-                    },
-                    "culture": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "wis"
-                    },
-                    "deception": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "cha"
-                    },
-                    "engineering": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "int"
-                    },
-                    "history": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "int"
-                    },
-                    "insight": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "wis"
-                    },
-                    "intimidation": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "cha"
-                    },
-                    "investigation": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "int"
-                    },
-                    "medicine": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "wis"
-                    },
-                    "nature": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "int"
-                    },
-                    "perception": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "wis"
-                    },
-                    "performance": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "cha"
-                    },
-                    "persuasion": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "cha"
-                    },
-                    "pilot": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "dex"
-                    },
-                    "science": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "int"
-                    },
-                    "sleight": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "dex"
-                    },
-                    "stealth": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "dex"
-                    },
-                    "survival": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "wis"
-                    }
-                },
-
-                "saves": {
-                    "str": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "str"
-                    },
-                    "dex": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "dex"
-                    },
-                    "con": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "con"
-                    },
-                    "int": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "int"
-                    },
-                    "wis": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "wis"
-                    },
-                    "cha": {
-                        "value": "+0",
-                        "proficient": false,
-                        "mod": "cha"
-                    }
-                }
-            },
-            "background": {
-                "playername": "",
-                "biography": "",
-                "campaign": "",
-                "race": "",
-                "origin": "",
-                "class": "",
-                "rank": 1,
-                "hd": "",
-                "mp": 0,
-
-                "abilities": {
-                    "racial": "",
-                    "feats": "",
-                    "class": "",
-                    "equipment": "",
-                    "proficiencies": "",
-                    "notes": ""
-                }
-            }
+  "Actor": {
+    "types": [ "player", "npc", "vehicle" ],
+    "templates": {
+      "minimal": {
+        "health": {
+          "value": 20,
+          "maxBonus": 10,
+          "maxLevelBonus": 0
+        },
+        "temp_health": {
+          "value": 0,
+          "max": 0
         },
 
-        "player": {
-            "templates": [ "common", "background" ]
+        "condition": "normal",
+        "acBonus": 0,
+        "bulkBonus": 0,
+        "speedBase": 6,
+        "size": "medium"
+
+      },
+      "common": {
+
+        "determination": {
+          "value": 2,
+          "maxBonus": 1
         },
 
-        "vehicle": {
-            "templates": ["common"],
-            "techLevel": 3,
-            "size": "medium",
-            "description": "",
-            "handling": 10
+        "proficiencyBonus": 0,
+        "initiativeBonus": 0,
+        "moxieBonus": 0,
+
+        "deathSaves": {
+          "successes": 0,
+          "fails": 0
         },
 
-        "npc": {
-            "templates": ["common"],
-            "cr": 0,
-            "size": "normal",
-            "gm_notes": "",
-            "details": ""
+        "attributes": {
+          "str": {
+            "value": 10
+          },
+          "dex": {
+            "value": 10
+          },
+          "con": {
+            "value": 10
+          },
+          "int": {
+            "value": 10
+          },
+          "wis": {
+            "value": 10
+          },
+          "cha": {
+            "value": 10
+          }
+        },
+
+        "skills": {
+          "acrobatics": {
+            "proficient": 0,
+            "attribute": "dex"
+          },
+          "animalhandling": {
+            "proficient": 0,
+            "attribute": "wis"
+          },
+          "athletics": {
+            "proficient": 0,
+            "attribute": "str"
+          },
+          "culture": {
+            "proficient": 0,
+            "attribute": "wis"
+          },
+          "deception": {
+            "proficient": 0,
+            "attribute": "cha"
+          },
+          "engineering": {
+            "proficient": 0,
+            "attribute": "int"
+          },
+          "history": {
+            "proficient": 0,
+            "attribute": "int"
+          },
+          "insight": {
+            "proficient": 0,
+            "attribute": "wis"
+          },
+          "intimidation": {
+            "proficient": 0,
+            "attribute": "cha"
+          },
+          "investigation": {
+            "proficient": 0,
+            "attribute": "int"
+          },
+          "medicine": {
+            "proficient": 0,
+            "attribute": "wis"
+          },
+          "nature": {
+            "proficient": 0,
+            "attribute": "int"
+          },
+          "perception": {
+            "proficient": 0,
+            "attribute": "wis"
+          },
+          "performance": {
+            "proficient": 0,
+            "attribute": "cha"
+          },
+          "persuasion": {
+            "proficient": 0,
+            "attribute": "cha"
+          },
+          "pilot": {
+            "proficient": 0,
+            "attribute": "dex"
+          },
+          "science": {
+            "proficient": 0,
+            "attribute": "int"
+          },
+          "sleight": {
+            "proficient": 0,
+            "attribute": "dex"
+          },
+          "stealth": {
+            "proficient": 0,
+            "attribute": "dex"
+          },
+          "survival": {
+            "proficient": 0,
+            "attribute": "wis"
+          }
+        },
+
+        "saves": {
+          "str": {
+            "proficient": 0
+          },
+          "dex": {
+            "proficient": 0
+          },
+          "con": {
+            "proficient": 0
+          },
+          "int": {
+            "proficient": 0
+          },
+          "wis": {
+            "proficient": 0
+          },
+          "cha": {
+            "proficient": 0
+          }
+        },
+
+        "miscSettings": {
+          "extraAutoFire": 0
         }
+      },
+      "background": {
+        "playername": "",
+        "biography": "",
+        "spentMP": "",
+        "race": "",
+        "origin": "",
+        "class": "",
+        "levelInput": 1,
+        "hd": "d8",
+        "mp": 0,
+
+        "abilities": {
+          "racial": "",
+          "feats": "",
+          "class": "",
+          "proficiencies": "",
+          "notes": ""
+        }
+      }
     },
 
-    "Item": {
-        "types": ["weapon", "equip"],
-        "templates": {
-            "itemDescription": {
-                "description": "",
-                "techLevel": 2
-            },
-            "physicalItem": {
-                "bulk": 1,
-                "quantity": 1
-            },
-            "attack": {
-                "attackAbility": "dex",
-                "toHit": "4",
-                "dmg": "1d6",
-				"atkSnd" : null,
-				"dmgSnd" : null,
-                "ammo": {
-                    "bulk": null,
-                    "value": null,
-                    "max": null,
-                    "target": null,
-                    "reload": null
-                },
-                "details": {
-                    "type": "piercing",
-                    "sec_type": null,
-                    "range": {
-                        "normal": 50,
-                        "max": 100
-                    },
-                    "special": ""
-                },
-                "target": {
-                    "value": null,
-                    "width": null,
-                    "type": ""
-                }
-            }
-        },
+    "player": {
+      "templates": [ "minimal", "common", "background" ],
+      "baseKitDisabled": false
+    },
 
-        "weapon": {
-            "templates": ["itemDescription", "physicalItem", "attack"],
-            "isProficient": true
-        },
+    "vehicle": {
+      "templates": [ "minimal" ],
+      "techLevel": 2,
+      "vehicleType": "",
+      "description": "",
+      "handling": 10,
+      "cruisingSpeed": 100
+    },
 
-        "equip": {
-            "templates": ["itemDescription", "physicalItem"]
-        }
+    "npc": {
+      "templates": [ "minimal", "common" ],
+      "cr": 0,
+      "gm_notes": "",
+      "details": ""
     }
+  },
+
+  "Item": {
+    "types": [ "weapon", "armor", "equip" ],
+    "templates": {
+      "itemDescription": {
+        "description": "",
+        "techLevel": 2
+      },
+      "physicalItem": {
+        "bulk": 0,
+        "quantity": 1,
+        "partOfBaseKit": false,
+        "carried": true
+      },
+      "attack": {
+        "attackAbility": "dex",
+        "toHitBonus": 0,
+        "dmg": "1d6",
+        "atkSnd": null,
+        "dmgSnd": null,
+        "ammo": {
+          "bulk": null,
+          "value": null,
+          "max": null,
+          "extraMags": null,
+          "target": null,
+          "reload": 0
+        },
+        "burstAttack": {
+          "able": false,
+          "ammoCost": 3,
+          "atkSnd": null,
+          "dmgSnd": null
+        },
+        "autoAttack": {
+          "able": false,
+          "ammoCost": 10,
+          "stabilized": false,
+          "atkSnd": null,
+          "dmgSnd": null,
+          "autoBalanceFullAuto": false
+        },
+        "range": {
+          "short": 50,
+          "long": 100,
+          "shortBonus": "+0",
+          "longBonus": "+0",
+          "hasPointBlankDisadvantage": true
+        },
+        "details": {
+          "type": "piercing",
+          "sec_type": null,
+          "special": ""
+        },
+        "target": {
+          "value": null,
+          "width": null,
+          "type": ""
+        }
+      },
+      "lightItem": {
+        "lighted": false,
+        "dimLight": 0,
+        "brightLight": 0,
+        "lightAngle": 360,
+        "lightColor": "#ffffff",
+        "lightAlpha": 0.2,
+        "lightAnimationType": "",
+        "lightAnimationSpeed": 5,
+        "lightAnimationIntensity": 5
+      }
+    },
+
+    "weapon": {
+      "templates": [ "itemDescription", "physicalItem", "attack" ],
+      "isProficient": true
+    },
+
+    "armor": {
+      "templates": [ "itemDescription", "physicalItem" ],
+      "worn": true,
+      "acBonus": 0,
+      "bulkBonus": 0,
+      "strRequired": 0,
+      "heavyArmor": false,
+      "additive": false,
+      "special": ""
+    },
+
+    "equip": {
+      "templates": [ "itemDescription", "physicalItem", "lightItem" ],
+      "isLightItem": false
+    }
+  }
 }

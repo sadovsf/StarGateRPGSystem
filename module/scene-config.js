@@ -5,7 +5,7 @@ Hooks.on("renderSceneConfig", (sheet, html, data) => {
     const sceneTension = data.document.getFlag("sgrpg", "sceneTensionDie") || "";
 
     let tensionDiceOptions = "";
-    for(const die in SGRPG.tensionDice) {
+    for (const die in SGRPG.tensionDice) {
         tensionDiceOptions += `<option value="${die}" ${sceneTension === die ? "selected" : ""}>${SGRPG.tensionDice[die]}</option>`
     }
 
@@ -22,7 +22,7 @@ Hooks.on("renderSceneConfig", (sheet, html, data) => {
         </div>`
     );
 
-    if (! sheet._minimized) {
+    if (!sheet._minimized) {
         sheet.setPosition(sheet.position);
     }
 });

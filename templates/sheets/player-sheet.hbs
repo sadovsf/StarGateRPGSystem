@@ -1,442 +1,593 @@
 <form class="{{cssClass}} sgrpg charsheet" autocomplete="off">
 
-<div class="sheet-header">
-  <nav class="sheet-navigation tabs" data-group="primary">
-    <a class="item active" data-tab="character">Character</a>
-    <a class="item" data-tab="background">Background</a>
-    <a class="item" data-tab="credits">Credits</a>
-    <!-- <a class="item" data-tab="settings">Settings</a> NOT IMPLEMENTED YET-->
-  </nav>
-  {{> "systems/sgrpg/templates/sheets/parts/actor-bulk-progress.hbs"}}
-</div>
-
-
-<div class="sg-sheet-body">
-<!--  --------------------------------------------------------------------------------- -->
-<!--  --------------------------- PAGE 1 ---------------------------------------------- -->
-<!--  --------------------------------------------------------------------------------- -->
-<main class="character tab-content tab1 page1 tab" data-tab="character">
-
-<!-- NAME SECTION -->
-  <section class="name columnflex nowrap">
-
-    <div class="rowflex nowrap spaced">
-      <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="50" width="50"/>
-      <div class="columnflex nowrap">
-        <label style="width:100px;">Character name:</label>
-        <input name="name" type="text" value="{{actor.name}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label style="width:80px;">Player name</label>
-        <input name="data.playername" type="text" value="{{data.playername}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label>Campaign</label>
-        <input name="data.campaign" type="text" value="{{data.campaign}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label>Sheet version: 1.0</label>
-      </div>
-      <a class="config-button" title="Configure feat details" data-action="flags"><i class="fa fa-cog"></i></a>
+    <div class="sheet-header">
+        <nav class="sheet-navigation tabs" data-group="primary">
+            <a class="item" data-tab="character">Character</a>
+            <a class="item" data-tab="background">Background</a>
+            <a class="item" data-tab="advanced">Advanced</a>
+            <a class="item" data-tab="credits">Credits</a>
+            <!-- <a class="item" data-tab="settings">Settings</a> NOT IMPLEMENTED YET-->
+        </nav>
+        {{> "systems/sgrpg/templates/sheets/parts/actor-bulk-progress.hbs"}}
     </div>
 
-    <div class="rowflex nowrap spaced">
 
-      <div class="columnflex nowrap">
-        <label>Race</label>
-        <input name="data.race" list="race" placeholder="race" type="text" value="{{data.race}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label>Origin</label>
-        <input name="data.origin" list="origin" placeholder="origin" type="text" value="{{data.origin}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label>Class</label>
-        <input name="data.class" list="rpgclass" placeholder="class" type="text" value="{{data.class}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label class="w40" title="@{rank}">Level</label>
-        <input name="data.rank" title="@{rank}" type="number" placeholder="1" class="w40" value="{{data.rank}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label class="w40" title="Hit Dice">HD</label>
-        <input name="data.hd" type="text" placeholder="d8" title="Hit Dice: @{hd}" class="w40" value="{{data.hd}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label class="w30">MP</label>
-        <input name="data.mp" type="number" placeholder="" title="Mission Points" class="w40" value="{{data.mp}}">
-      </div>
-      <div class="columnflex nowrap">
-        <label class="w70">Tension Die: {{data.tensionDie}}</label>
-      </div>
+    <div class="sg-sheet-body">
+        <!--  --------------------------------------------------------------------------------- -->
+        <!--  --------------------------- PAGE 1 ---------------------------------------------- -->
+        <!--  --------------------------------------------------------------------------------- -->
+        <main class="character tab-content tab1 page1 tab" data-tab="character">
+
+            <!-- NAME SECTION -->
+            <section class="name columnflex nowrap">
+
+                <div class="rowflex nowrap spaced">
+                    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="50" width="50" />
+                    <div class="columnflex nowrap">
+                        <label style="width:100px;">Character name:</label>
+                        <input name="name" type="text" value="{{actor.name}}">
+                    </div>
+                    <div class="columnflex nowrap">
+                        <label style="width:80px;">Player name</label>
+                        <input name="system.playername" type="text" value="{{system.playername}}">
+                    </div>
+                    <div class="columnflex nowrap" title="Total Spent Mission Points&#010;Either input the total number, or use the format of '5+5+9+3+4+...'">
+                        <label>Spent MP</label>
+                        <input name="system.spentMP" type="text" value="{{system.spentMP}}">
+                    </div>
+                    <a class="config-button" title="Configure feat details" data-action="flags"><i class="fa fa-cog"></i></a>
+                </div>
+
+                <div class="rowflex nowrap spaced">
+
+                    <div class="columnflex nowrap">
+                        <label>Race</label>
+                        <input name="system.race" list="race" placeholder="race" type="text" value="{{system.race}}">
+                    </div>
+                    <div class="columnflex nowrap">
+                        <label>Origin</label>
+                        <input name="system.origin" list="origin" placeholder="origin" type="text" value="{{system.origin}}">
+                    </div>
+                    <div class="columnflex nowrap">
+                        <label>Class</label>
+                        <input name="system.class" list="rpgclass" placeholder="class" type="text" value="{{system.class}}">
+                    </div>
+                    <div class="columnflex nowrap">
+                        <label class="w40">Level</label>
+                        <input onfocus="this.select();" {{#unless structural.autoLevel}}name="system.levelInput"{{/unless}} type="number" placeholder="" class="w40" value="{{system.level}}" data-dtype="Number" {{#if structural.autoLevel}}readonly{{/if}} />
+                    </div>
+                    <div class="columnflex nowrap">
+                        <label class="w40" title="Hit Dice">HD</label>
+                        <input onfocus="this.select();" name="system.hd" type="text" placeholder="" title="Hit Dice" class="w40" value="{{system.hd}}" data-dtype="String">
+                    </div>
+                    <div class="columnflex nowrap">
+                        <label class="w30">MP</label>
+                        <input onfocus="this.select();" name="system.mp" type="number" placeholder="" title="Remaining Mission Points" class="w40" value="{{system.mp}}" data-dtype="Number">
+                    </div>
+                    <div class="columnflex nowrap">
+                        <label class="w70">Tension Die: {{tensionDie}}</label>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- ATTRIBUTES SECTION -->
+
+            <div class="attr columnflex nowrap spaced center">
+                {{#each system.attributes as |attr a|}}
+                <div class="stat columnflex nowrap center middle" data-attr="{{a}}">
+                    <a type="roll" class="txt-btn large" data-bonus="system.attributes.{{a}}.mod">{{a}}</a>
+                    <input data_type="ability_value" name="system.attributes.{{a}}.value" type="number" value="{{attr.value}}" data-dtype="Number" />
+                    <span class="mod">{{attr.modVisual}}</span>
+                </div>
+                {{/each}}
+            </div>
+
+
+            <!-- Skills (20)-->
+
+            <section class="skills columnflex nowrap spaced">
+                <h3>Skills</h3>
+
+                {{#each system.skills as |skill s|}}
+                <div class="rowflex nowrap" data-skill="{{s}}">
+                    <input class="w40" value="{{skill.totalVisual}}" style="font-weight:bold" readonly>
+                    <a type="roll" class="txt-btn" data-bonus="system.skills.{{s}}.total">{{s}}</a>
+                    <div class="flexcol">
+                        {{#if (greaterThan skill.proficient 0)}}{{#if (greaterThan skill.proficient 1)}}<i class="fas fa-star flex-center-image"></i>{{else}}<i class="far fa-star flex-center-image"></i>{{/if}}{{/if}}
+                    </div>
+                    <span class="mod">
+                        <select name="system.skills.{{s}}.proficient" class="skillModSelect" data-dtype="Number">
+                            {{selectOptions ../selectables.proficiencySelects selected=skill.proficient localize=false}}
+                        </select>
+                    </span>
+                </div>
+                {{/each}}
+
+            </section>
+
+
+            <!-- hp -->
+
+            <section class="hp rowflex nowrap">
+                <div class="section columnflex nowrap middle center">
+                    <div class="rowflex nowrap">
+                        <label class="txtcenter" title="Hit Points">HP</label>
+                        <a type="roll_restheal" class="txt-btn" style="margin-top:4px;">Rest</a>
+                    </div>
+                    <div class="rowflex nowrap">
+                        <input onfocus="this.select();" name="system.health.value" type="number" value="{{system.health.value}}" placeholder="XXX" class="smallstat w50" data-dtype="Number" />
+                        <span class="slash">/</span>
+                        <input type="number" value="{{system.health.max}}" placeholder="XXX" class="smallstat w50" data-dtype="Number" readonly />
+                    </div>
+
+                </div>
+                <div class="section columnflex nowrap middle center determ">
+                    <label class="txtcenter" title="Temporary Hit Points">Temp HP</label>
+                    <div class="rowflex nowrap">
+                        <input onfocus="this.select();" name="system.temp_health.value" type="number" class="smallstat w30" value="{{system.temp_health.value}}" />
+                        <span class="slash">/</span>
+                        <input onfocus="this.select();" name="system.temp_health.max" type="number" class="smallstat w30" value="{{system.temp_health.max}}" />
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- condition -->
+
+            <section class="condition columnflex nowrap spaced">
+                <h3 class="txtcenter">CONDITION</h3>
+                {{radioBoxes "system.condition" config.conditions checked=system.condition localize=false}}
+            </section>
+
+
+            <!-- prof -->
+
+            <div class="prof rowflex nowrap">
+                <div class="section columnflex nowrap middle center">
+                    <label class="wide" title="Proficiency Bonus">Prof Bonus</label>
+                    <input type="number" class="stat w40" value="{{system.proficiencyLevel}}" readonly>
+                </div>
+                <div class="section columnflex nowrap middle center init">
+                    <a type="roll_init" class="txt-btn">Initiative</a>
+                    <input type="number" class="stat w40" value="{{system.initiative}}" readonly>
+                </div>
+                <div class="section columnflex nowrap middle center moxie">
+                    <a type="roll_moxie" class="txt-btn">Moxie</a>
+                    <input type="number" class="stat w40" value="{{system.moxie}}" readonly>
+                </div>
+            </div>
+
+
+            <!-- ac -->
+
+            <div class="ac rowflex nowrap">
+                <div class="section columnflex nowrap middle center">
+                    <label class="wide">Armor Class</label>
+                    <input type="number" class="stat w70" value="{{system.ac}}" readonly>
+                </div>
+                <div class="section columnflex nowrap middle center">
+                    <label class="wide">determination</label>
+                    <div class="rowflex nowrap">
+                        <input onfocus="this.select();" name="system.determination.value" type="number" class="stat w40" value="{{system.determination.value}}">
+                        <span class="slash">/</span>
+                        <input type="number" class="stat w40" value="{{system.determination.max}}" readonly>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- speed -->
+
+            <div class="speed rowflex nowrap">
+                <div class="section columnflex nowrap middle center">
+                    <label class="bold txtcenter">Speed</label>
+                    <input type="text" class="w70 stat" value="{{system.speed}}" readonly>
+                </div>
+                <div class="section death columnflex nowrap middle center">
+                    <a type="roll_deathsave" class="txt-btn large">Death Save</a>
+                    <div class="rowflex nowrap">
+                        <input class="death-save-checkbox success" type="checkbox" value="1" {{checked (greaterThan system.deathSaves.successes 0)}}>
+                        <input class="death-save-checkbox success" type="checkbox" value="2" {{checked (greaterThan system.deathSaves.successes 1)}}>
+                        <input class="death-save-checkbox success" type="checkbox" value="3" {{checked (greaterThan system.deathSaves.successes 2)}}>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="rowflex nowrap">
+                        <input type="checkbox" class="death-save-checkbox fail" value="1" {{checked (greaterThan system.deathSaves.fails 0)}}>
+                        <input type="checkbox" class="death-save-checkbox fail" value="2" {{checked (greaterThan system.deathSaves.fails 1)}}>
+                        <input type="checkbox" class="death-save-checkbox fail" value="3" {{checked (greaterThan system.deathSaves.fails 2)}}>
+                        <i class="fas fa-skull-crossbones"></i>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- saves -->
+
+            <section class="saves columnflex nowrap">
+                <h3>Saves</h3>
+                {{#each system.saves as |save s|}}
+                <div class="rowflex nowrap" data-save="{{s}}">
+                    <input class="w30" value="{{save.totalVisual}}" readonly>
+                    <a type="roll" class="txt-btn" data-bonus="system.saves.{{s}}.total">{{lookup ../config.saves s}}</a>
+                    <span class="mod">
+                        <select name="system.saves.{{s}}.proficient" data-dtype="Number">
+                            {{selectOptions ../selectables.proficiencySelects selected=save.proficient localize=false}}
+                        </select>
+                    </span>
+                </div>
+                {{/each}}
+            </section>
+
+
+            <!-- bulk -->
+
+            <section class="bulk columnflex nowrap middle center">
+                <h3>Vest bulk capacity</h3>
+                <input type="number" class="stat w40" value="{{system.bulkMax}}" data-dtype="Number" readonly>
+            </section>
+
+            <!-- mini notes -->
+
+            <section class="inventory flexcol nowrap center">
+                <h4 class="flex0">Notes</h4>
+                <div class="flexrow flex1" style="width: 100%">
+                    <textarea name="system.abilities.notes">{{system.abilities.notes}}</textarea>
+                </div>
+            </section>
+
+            <!-- armors -->
+
+            <section class="armors">
+                {{> "systems/sgrpg/templates/sheets/parts/actor-armor-inventory.hbs"}}
+                <div style="flex: 1"></div>
+            </section>
+
+            <!-- attacks -->
+
+            <section class="attacks">
+                {{> "systems/sgrpg/templates/sheets/parts/actor-weapon-inventory.hbs"}}
+                <div style="flex: 1"></div>
+            </section>
+
+        </main>
+
+        <!--  --------------------------------------------------------------------------------- -->
+        <!--  --------------------------- PAGE 2 ---------------------------------------------- -->
+        <!--  --------------------------------------------------------------------------------- -->
+        <main class="background tab-content tab2 page2 tab" data-tab="background">
+
+            <section class="racial_abilities columnflex nowrap center">
+                <label>Racial Abilities</label>
+                {{editor editorData.racial target="system.abilities.racial" button=true owner=owner editable=editable rollData=rollData}}
+            </section>
+
+            <section class="feats columnflex nowrap center">
+                <label>Feats</label>
+                {{editor editorData.feats target="system.abilities.feats" button=true owner=owner editable=editable rollData=rollData}}
+            </section>
+
+            <section class="class columnflex nowrap center">
+                <label>Class Abilities</label>
+                {{editor editorData.class target="system.abilities.class" button=true owner=owner editable=editable rollData=rollData}}
+            </section>
+
+            <section class="equipment columnflex nowrap center item-list">
+                <label>Base Kit</label>
+                {{> "systems/sgrpg/templates/sheets/parts/actor-basekit-inventory.hbs"}}
+                <div class="flex1"></div>
+            </section>
+
+            <section class="prof columnflex nowrap center">
+                <label>Proficiencies</label>
+                {{editor editorData.proficiencies target="system.abilities.proficiencies" button=true owner=owner editable=editable rollData=rollData}}
+            </section>
+
+            <section class="equipment columnflex nowrap center item-list">
+                <label>Inventory</label>
+                {{> "systems/sgrpg/templates/sheets/parts/actor-equip-inventory.hbs"}}
+                <div class="flex1"></div>
+            </section>
+
+
+        </main>
+
+        <!--  --------------------------------------------------------------------------------- -->
+        <!--  --------------------------- PAGE 3 ---------------------------------------------- -->
+        <!--  --------------------------------------------------------------------------------- -->
+
+        <main class="advanced tab-content tab4 page4 tab" data-tab="advanced">
+
+            <section class="skills columnflex nowrap spaced">
+                <h3>Skill Attributes</h3>
+                {{#each system.skills as |skill s|}}
+                <div class="rowflex nowrap" data-skill="{{s}}">
+                    <a class="resource-label">{{s}}</a>
+                    <span class="mod">
+                        <select name="system.skills.{{s}}.attribute" class="skillModSelect" data-dtype="String">
+                            {{selectOptions ../config.abilities selected=skill.attribute localize=false}}
+                        </select>
+                        <a class="skill-mod-revert" title="Revert to default attribute"><i class="fa fa-undo" style="font-size: 8px;"></i></a>
+                    </span>
+                </div>
+                {{/each}}
+            </section>
+
+            <section class="sets double hpsets columnflex nowrap spaced">
+                <div class="flexrow flex-group-center">
+                    <span class="bold-text">Total HP</span>
+                    <i class="equal fas fa-equals xs"></i>
+                    <span>HP Bonus</span>
+                    <span>Per Level Bonus</span>
+                    <span>Hit Die HP</span>
+                    <span>Con Bonus</span>
+                </div>
+                <div class="flexrow flex-group-center">
+                    <input class="setvisual" type="number" value="{{system.health.max}}" readonly />
+                    <i class="equal fas fa-equals xs"></i>
+                    <input onfocus="this.select();" class="setvisual" type="number" name="system.health.maxBonus" value="{{system.health.maxBonus}}" data-dtype="Number" />
+                    <span><input onfocus="this.select();" class="setinput" type="number" name="system.health.maxLevelBonus" value="{{system.health.maxLevelBonus}}" data-dtype="Number" style="margin-left:4px;" /> * {{system.level}}</span>
+                    <span>{{system.visualData.hitDieTotal}}</span>
+                    <span>{{system.visualData.conBonus}}</span>
+                </div>
+                <div class="flexrow flex-group-center">
+                    <span class="bold-text">Max Determ.</span>
+                    <i class="equal fas fa-equals xs"></i>
+                    <span></span>
+                    <span>Character Bonus</span>
+                    <span></span>
+                    <span>Proficiency</span>
+                </div>
+                <div class="flexrow flex-group-center">
+                    <input class="setvisual" type="number" value="{{system.determination.max}}" readonly />
+                    <i class="equal fas fa-equals xs"></i>
+                    <span></span>
+                    <input onfocus="this.select();" class="setinput" type="number" name="system.determination.maxBonus" value="{{system.determination.maxBonus}}" data-dtype="Number" />
+                    <span></span>
+                    <span>{{system.proficiencyLevel}}</span>
+                </div>
+            </section>
+
+            <section class="sets acsets columnflex nowrap spaced">
+                <div class="flexrow flex-group-center">
+                    <span class="bold-text">Total AC</span>
+                    <i class="equal fas fa-equals xs"></i>
+                    <span>Armor Base AC</span>
+                    <span>Armor Additional</span>
+                    <span>Character Bonus</span>
+                    <span>Dex Bonus</span>
+                </div>
+                <div class="flexrow flex-group-center">
+                    <input class="setvisual" type="number" value="{{system.ac}}" readonly />
+                    <i class="equal fas fa-equals xs"></i>
+                    <span>{{system.visualData.armorAC}}</span>
+                    <span>{{system.visualData.armorAdditional}}</span>
+                    <input onfocus="this.select();" class="setinput" type="number" name="system.acBonus" value="{{system.acBonus}}" data-dtype="Number" />
+                    <span>{{system.visualData.dexBonus}}</span>
+                </div>
+                <div class="flexrow flex-group-center">
+                    <span class="bold-text">Bulk Capacity</span>
+                    <i class="equal fas fa-equals xs"></i>
+                    <span>Armor Base Bulk</span>
+                    <span>Armor Bulk Mod.</span>
+                    <span>Character Bonus</span>
+                    <span>Str Bonus</span>
+                </div>
+                <div class="flexrow flex-group-center">
+                    <input class="setvisual" type="number" value="{{system.bulkMax}}" readonly />
+                    <i class="equal fas fa-equals xs"></i>
+                    <span>{{system.visualData.armorBulk}}</span>
+                    <span>{{system.visualData.armorBulkPlus}}</span>
+                    <input onfocus="this.select();" class="setinput" type="number" name="system.bulkBonus" value="{{system.bulkBonus}}" data-dtype="Number" />
+                    <span>{{system.attributes.str.mod}}</span>
+                </div>
+            </section>
+
+            <section class="sets initsets columnflex nowrap spaced">
+                <div class="flexrow span-margins flex-group-center">
+                    <span class="bold-text">Proficiency</span>
+                    <span>Total: {{system.proficiencyLevel}}</span>
+                    <span>Level {{system.level}}: {{system.proficiencyFromLevel}}</span>
+                    <span>Bonus: <input onfocus="this.select();" class="setinput" type="number" name="system.proficiencyBonus" value="{{system.proficiencyBonus}}" data-dtype="Number" /></span>
+                </div>
+                <div class="flexrow span-margins flex-group-center">
+                    <span class="bold-text">Initiative</span>
+                    <span>Total: {{system.initiative}}</span>
+                    <span>Attribute {{system.visualData.initiative}}</span>
+                    <span>Bonus: <input onfocus="this.select();" class="setinput" type="number" name="system.initiativeBonus" value="{{system.initiativeBonus}}" data-dtype="Number" /></span>
+                </div>
+                <div class="flexrow span-margins flex-group-center">
+                    <span class="bold-text">Moxie</span>
+                    <span>Total: {{system.moxie}}</span>
+                    <span>Attribute {{system.visualData.moxie}}</span>
+                    <span>Bonus: <input onfocus="this.select();" class="setinput" type="number" name="system.moxieBonus" value="{{system.moxieBonus}}" data-dtype="Number" /></span>
+                </div>
+                <div class="flexrow span-margins flex-group-center">
+                    <span class="bold-text">Speed</span>
+                    <span>Base: <input onfocus="this.select();" class="setinput" type="number" name="system.speedBase" value="{{system.speedBase}}" data-dtype="Number" /></span>
+                    <span>Limited by Armor: {{system.visualData.armorLimitsSpeed}}</span>
+                    <span>Actual: {{system.speed}}</span>
+                </div>
+            </section>
+
+            <section class="sets miscsets columnflex nowrap spaced">
+                <div class="flexrow span-margins flex-group-center">
+                    <span class="bold-text">Max Auto Shots</span>
+                    <span>Total: {{system.maxAutomaticShots}}</span>
+                    <span>Strength: {{system.attributes.str.mod}}</span>
+                    <span>Extra: <input onfocus="this.select();" class="setinput" type="number" name="system.miscSettings.extraAutoFire" value="{{system.miscSettings.extraAutoFire}}" data-dtype="Number" /></span>
+                </div>
+                <div class="flexrow span-margins flex-group-center">
+                    <span class="bold-text">Mission Points</span>
+                    <span>Used MP: {{system.usedMPCount}}</span>
+                    <span>All MP: {{system.allMPCount}}</span>
+                </div>
+            </section>
+        </main>
+
+        <!--  --------------------------------------------------------------------------------- -->
+        <!--  --------------------------- PAGE 4 ---------------------------------------------- -->
+        <!--  --------------------------------------------------------------------------------- -->
+        <main class="credits tab-content tab3 page3 tab" data-tab="credits">
+            <section class="links columnflex nowrap center">
+                <label>Credits</label>
+                <p>Rules are made by <b>Wyvern Gaming</b> and can be purchased on official page. Links bellow.</p>
+                <table>
+                    <tr>
+                        <td>Official page:</td>
+                        <td><a href="https://stargatetherpg.com">https://stargatetherpg.com</a></td>
+                    </tr>
+                    <tr>
+                        <td>Rules:</td>
+                        <td><a href="https://stargatetherpg.com/files/file/74-stargate-sg-1-roleplaying-game-core-rulebook/">link</a></td>
+                    </tr>
+                </table>
+
+                <p>System for foundry is implemented by @sadovsf and published with permision from <b>Wyvern Gaming</b>.</p>
+                <table>
+                    <tr>
+                        <td>Foundry system:</td>
+                        <td><a href="https://github.com/sadovsf/StargateRPGSystem">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Icons author (AurelTristen):</td>
+                        <td><a href="https://www.patreon.com/HellScapeAssets">link</a></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="chlog columnflex nowrap center">
+                <label>Changelog</label>
+                <p>
+                    <ul>
+                        <li>
+                            <b>1.2.0-alpha</b>
+                            <ul>
+                                <li>Added credits section</li>
+                                <li>Initial public version</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </p>
+            </section>
+        </main>
+
+
+        <!--
+
+        <main class="settings tab-content tab3 page3 tab" data-tab="settings">
+
+          <section class="settings columnflex nowrap center">
+            <label>Settings</label>
+
+            <div class="rowflex nowrap">
+              <span title="@{whisper}">Whisper rolls?</span>
+              <input name="data.whisper" title="@{whisper}" type="checkbox"  value="{{data.whisper}}">
+            </div>
+
+            <div class="rowflex nowrap">
+              <span title="@{show_name}">Show name in rolls?</span>
+              <select name="data.show_name" title="@{show_name}">
+                <option >Yes</option>
+                <option >No</option>
+              </select>
+            </div>
+
+            <div class="rowflex nowrap">
+              <a name="roll_hd" type="roll" title="%{hd}" >Short Rest</a>
+              <a name="roll_longrest" type="roll" title="%{longrest}" >Long Rest</a>
+              <a name="roll_td" type="roll" title="%{td}" >Tension Dice</a>
+            </div>
+            <div class="rowflex nowrap">
+              <label>Custom roll</label>
+            </div>
+            <div class="rowflex nowrap">
+              <a name="roll_custom1" type="roll" value="@{whisper}@{custom1}"></a>
+              <input type="text" name="data.custom1" >
+            </div>
+            <div class="rowflex nowrap">
+              <a name="roll_custom2" type="roll" value="@{whisper}@{custom2}"></a>
+              <input type="text" name="data.custom2" >
+            </div>
+            <div class="rowflex nowrap">
+              <a name="roll_custom3" type="roll" value="@{whisper}@{custom3}"></a>
+              <input type="text" name="data.custom3" >
+            </div>
+            <div class="rowflex nowrap">
+              <a name="roll_custom4" type="roll" value="@{whisper}@{custom4}"></a>
+              <input type="text" name="data.custom4" >
+            </div>
+          </section>
+
+          <section class="other columnflex nowrap center">
+            <label>Other stats</label>
+            <div class="rowflex nowrap">
+              <span>Eureka Points:</span>
+              <input name="data.eureka" type="number" placeholder="" title="Eureka Points: @{eureka}"  class="w40" value="{{data.eureka}}">
+              /
+              <input name="data.eureka_max" type="number" placeholder="" title="Max Eureka Points: @{eureka|max}" class="w40" value="{{data.eureka_max}}">
+            </div>
+            <div class="columnflex nowrap">
+              <span>Wounds/Ability Damage</span>
+              <textarea name="data.ability_damage" class="dmg"></textarea>
+            </div>
+          </section>
+
+          <section class="changelog columnflex nowrap center">
+
+          </section>
+
+
+          <div class="ammo">
+            <div class="section columnflex nowrap">
+              <label class=" other">NPC stuff</label>
+              <div class="rowflex nowrap">
+                <span>CR:</span>
+                <input name="data.cr" type="number" placeholder="" title="Challenge Rating: @{cr}"  class="w40" value="{{data.cr}}">
+                <span>Speed</span>
+                <input name="data.speed_npc" type="text" style="width:200px" placeholder="1m Fly(6m)" title="@{speed_npc}"  class="w40" value="{{data.speed_npc}}">
+              </div>
+              <div class="rowflex nowrap">
+                <span>Type:</span>
+                <input name="data.type" type="text" style="width:350px" placeholder="Medium Humanoid(Scout 2)" title="Challenge Rating: @{type}"  class="w40" value="{{data.type}}">
+              </div>
+            </div>
+
+            <div class="section columnflex nowrap">
+              <label class=" other">Living Series</label>
+              <div class="rowflex nowrap">
+                <span>Stargaterpg.com username</span>
+                <input name="data.living_series_user" type="text" placeholder=""  class="w40" style="width:100px" value="{{data.living_series_user}}">
+                <span title="You can see your Roll20 id by going to your Roll20 profile page, and copying the numbers in the URL">Roll20 ID</span>
+                <input name="data.roll20id" type="text" style="width:100px" title="You can see your Roll20 id by going to your Roll20 profile page, and copying the numbers in the URL"  class="w40" value="{{data.roll20id}}">
+              </div>
+              <div class="rowflex nowrap">
+                <span>Stargaterpg.com character link</span>
+                <input name="data.cahracter_link" type="text" style="width:350px" placeholder="The url to your character sheet"  class="w40" value="{{data.cahracter_link}}">
+              </div>
+            </div>
+
+            <div class="ammo grid">
+              <div class="section columnflex nowrap middle center">
+                <label>Ammo Weapon 1</label>
+                <input name="data.ammo1" type="number"  value="{{data.ammo1}}">
+              </div>
+              <div class="section columnflex nowrap middle center">
+                <label>Ammo Weapon 2</label>
+                <input name="data.ammo2" type="number"  value="{{data.ammo2}}">
+              </div>
+              <div class="section columnflex nowrap middle center">
+                <label>Ammo Weapon 3</label>
+                <input name="data.ammo3" type="number"  value="{{data.ammo3}}">
+              </div>
+              <div class="section columnflex nowrap middle center">
+                <label>Ammo Weapon 4</label>
+                <input name="data.ammo4" type="number"  value="{{data.ammo4}}">
+              </div>
+            </div>
+          </div>
+
+        </main>
+        -->
     </div>
-
-  </section>
-
-
-<!-- ATTRIBUTES SECTION -->
-
-  <div class="attr columnflex nowrap spaced center">
-    {{#each data.attributes as |attr a|}}
-      <div class="stat columnflex nowrap center middle" data-attr="{{a}}">
-        <a type="roll" class="txt-btn large" data-bonus="data.attributes.{{a}}.mod">{{a}}</a>
-        <input data_type="ability_value" name="data.attributes.{{a}}.value" type="number" value="{{attr.value}}">
-        <span class="mod">{{attr.mod}}</span>
-      </div>
-    {{/each}}
-  </div>
-
-
-<!-- Skills (20)-->
-
-  <section class="skills columnflex nowrap spaced">
-    <h3>Skills</h3>
-
-    {{#each data.skills as |skill s|}}
-      <div class="rowflex nowrap" data-skill="{{s}}">
-        <input data_type="skill_prof" name="data.skills.{{s}}.proficient" type="checkbox" {{checked skill.proficient}}>
-        <input data_type="skill_value" name="data.skills.{{s}}.value" class="w30" value="{{skill.value}}">
-        <a type="roll" class="txt-btn" data-bonus="data.skills.{{s}}.value">{{s}}</a>
-        <span class="mod">
-          <select data_type="skill_mod"  name="data.skills.{{s}}.mod" class="skillModSelect">
-            {{selectOptions ../config.abilities selected=skill.mod localize=false}}
-          </select>
-          <a class="skill-mod-revert" title="Revert to default attribute mod"><i class="fa fa-undo" style="font-size: 8px;"></i></a>
-        </span>
-      </div>
-    {{/each}}
-
-  </section>
-
-
-<!-- hp -->
-
-  <section class="hp rowflex nowrap">
-    <div class="section columnflex nowrap middle center">
-      <label class="txtcenter" title="Hit Points">HP</label>
-      <div class="rowflex nowrap">
-        <input name="data.health.value" type="number" value="{{data.health.value}}" placeholder="20" class="stat w40" data-dtype="Number" value="{{data.health}}">
-        <span class="slash">/</span>
-        <input name="data.health.max" type="number" value="{{data.health.max}}" placeholder="20" class="stat w40" data-dtype="Number" value="{{data.health}}">
-      </div>
-
-    </div>
-    <div class="section columnflex nowrap middle center determ">
-      <label class="txtcenter" title="Temporary Hit Points">Temp HP</label>
-      <div class="rowflex nowrap">
-        <input name="data.temp_health.value" type="number"  class="stat w40" value="{{data.temp_health.value}}">
-        <span class="slash">/</span>
-        <input name="data.temp_health.max" type="number"  class="stat w40" value="{{data.temp_health.max}}">
-      </div>
-    </div>
-  </section>
-
-
-<!-- condition -->
-
-  <section class="condition columnflex nowrap spaced">
-    <h3 class="txtcenter" >CONDITION</h3>
-    {{radioBoxes "data.condition" config.conditions checked=data.condition localize=false}}
-  </section>
-
-
-<!-- prof -->
-
-  <div class="prof rowflex nowrap">
-    <div class="section columnflex nowrap middle center">
-      <label class="wide" title="Proficiency Bonus">Prof Bonus</label>
-      <input name="data.prof" type="number" class="stat w40" value="{{data.prof}}">
-    </div>
-    <div class="section columnflex nowrap middle center init">
-      <a type="roll_init" class="txt-btn">Initiative</a>
-      <input name="data.initiative" type="number" class="stat w40" value="{{data.initiative}}">
-    </div>
-    <div class="section columnflex nowrap middle center moxie">
-      <a type="roll_moxie" class="txt-btn">Moxie</a>
-      <input name="data.moxie" type="number" class="stat w40"value="{{data.moxie}}">
-    </div>
-  </div>
-
-
-<!-- ac -->
-
-  <div class="ac rowflex nowrap">
-    <div class="section columnflex nowrap middle center">
-      <label class="wide">Armor Class</label>
-      <input name="data.ac" type="number" class="stat w70" value="{{data.ac}}">
-    </div>
-    <div class="section columnflex nowrap middle center">
-      <label class="wide">determination</label>
-      <div class="rowflex nowrap">
-        <input name="data.determination.value" type="number" class="stat w40" value="{{data.determination.value}}">
-        <span class="slash">/</span>
-        <input name="data.determination.max" type="number" class="stat w40" value="{{data.determination.max}}">
-      </div>
-    </div>
-  </div>
-
-
-<!-- speed -->
-
-  <div class="speed rowflex nowrap">
-    <div class="section columnflex nowrap middle center">
-      <label class="bold txtcenter">Speed</label>
-      <input name="data.speed" type="text" class="w70 stat" value="{{data.speed}}">
-    </div>
-    <div class="section death columnflex nowrap middle center">
-      <a type="roll_deathsave" class="txt-btn large">Death Save</a>
-      <div class="rowflex nowrap">
-        <input class="death-save-checkbox sucess" type="checkbox" {{checked death_success1}}>
-        <input class="death-save-checkbox sucess" type="checkbox" {{checked death_success2}}>
-        <input class="death-save-checkbox sucess" type="checkbox" {{checked death_success3}}>
-        <span>Sucesses</span>
-      </div>
-      <div class="rowflex nowrap">
-        <input type="checkbox" class="death-save-checkbox fail" {{checked death_failure1}}>
-        <input type="checkbox" class="death-save-checkbox fail" {{checked death_failure2}}>
-        <input type="checkbox" class="death-save-checkbox fail" {{checked death_failure3}}>
-        <span>Failures</span>
-      </div>
-    </div>
-  </div>
-
-
-<!-- saves -->
-
-  <section class="saves columnflex nowrap">
-    <h3>Saves</h3>
-    {{#each data.saves as |save s|}}
-      <div class="rowflex nowrap" data-save="{{s}}">
-        <input data_type="skill_prof" name="data.saves.{{s}}.proficient" type="checkbox" {{checked save.proficient}}>
-        <input name="data.saves.{{s}}.value" class="w30" value="{{save.value}}">
-        <a type="roll" class="txt-btn" data-bonus="data.saves.{{s}}.value">{{lookup ../config.saves s}}</a>
-      </div>
-    {{/each}}
-  </section>
-
-
-<!-- bulk -->
-
-  <section class="bulk columnflex nowrap middle center">
-      <h3>Vest bulk capacity</h3>
-      <input name="data.bulk" type="number"  class="stat w40" value="{{data.bulk}}" data-dtype="Number">
-  </section>
-
-<!-- mini notes -->
-
-  <section class="inventory flexcol nowrap center">
-    <h4 class="flex0">Notes</h4>
-    <div class="flexrow flex1" style="width: 100%">
-      <textarea name="data.abilities.notes">{{data.abilities.notes}}</textarea>
-    </div>
-  </section>
-
-<!-- attacks -->
-
-  <section class="attacks">
-    {{> "systems/sgrpg/templates/sheets/parts/actor-weapon-inventory.hbs"}}
-    <div style="flex: 1"></div>
-  </section>
-
-</main>
-
-<!--  --------------------------------------------------------------------------------- -->
-<!--  --------------------------- PAGE 2 ---------------------------------------------- -->
-<!--  --------------------------------------------------------------------------------- -->
-<main class="background tab-content tab2 page2 tab" data-tab="background">
-
-  <section class="racial_abilities columnflex nowrap center">
-    <label>Racial Abilities</label>
-    {{editor content=data.abilities.racial target="data.abilities.racial" button=true owner=owner editable=editable rollData=rollData}}
-  </section>
-
-  <section class="feats columnflex nowrap center">
-    <label>Feats</label>
-    {{editor content=data.abilities.feats target="data.abilities.feats" button=true owner=owner editable=editable rollData=rollData}}
-  </section>
-
-  <section class="class columnflex nowrap center">
-    <label>Class Abilities</label>
-    {{editor content=data.abilities.class target="data.abilities.class" button=true owner=owner editable=editable rollData=rollData}}
-  </section>
-
-  <section class="equipment columnflex nowrap center">
-    <label>Equipment notes</label>
-    {{editor content=data.abilities.equipment target="data.abilities.equipment" button=true owner=owner editable=editable rollData=rollData}}
-  </section>
-
-  <section class="prof columnflex nowrap center">
-    <label>Proficiencies</label>
-    {{editor content=data.abilities.proficiencies target="data.abilities.proficiencies" button=true owner=owner editable=editable rollData=rollData}}
-  </section>
-
-  <section class="equipment columnflex nowrap center item-list">
-    <label>Inventory</label>
-    {{> "systems/sgrpg/templates/sheets/parts/actor-equip-inventory.hbs"}}
-    <div class="flex1"></div>
-  </section>
-
-
-</main>
-
-<!--  --------------------------------------------------------------------------------- -->
-<!--  --------------------------- PAGE 3 ---------------------------------------------- -->
-<!--  --------------------------------------------------------------------------------- -->
-<main class="credits tab-content tab3 page3 tab" data-tab="credits">
-  <section class="links columnflex nowrap center">
-    <label>Credits</label>
-    <p>Rules are made by <b>Wyvern Gaming</b> and can be purchased on official page. Links bellow.</p>
-    <table>
-      <tr>
-        <td>Official page:</td><td><a href="https://stargatetherpg.com">https://stargatetherpg.com</a></td>
-      </tr>
-      <tr>
-        <td>Rules:</td><td><a href="https://stargatetherpg.com/files/file/74-stargate-sg-1-roleplaying-game-core-rulebook/">link</a></td>
-      </tr>
-    </table>
-
-    <p>System for foundry is implemented by @sadovsf and published with permision from <b>Wyvern Gaming</b>.</p>
-    <table>
-      <tr>
-        <td>Foundry system:</td><td><a href="https://github.com/sadovsf/StargateRPGSystem">link</a></td>
-      </tr>
-      <tr>
-        <td>Icons author (AurelTristen):</td><td><a href="https://www.patreon.com/HellScapeAssets">link</a></td>
-      </tr>
-    </table>
-  </section>
-  <section class="chlog columnflex nowrap center">
-    <label>Changelog</label>
-    <p>
-      <ul>
-        <li>
-          <b>1.2.0-alpha</b>
-          <ul>
-            <li>Added credits section</li>
-            <li>Initial public version</li>
-          </ul>
-        </li>
-      </ul>
-    </p>
-  </section>
-</main>
-
-
-<!--
-
-<main class="settings tab-content tab3 page3 tab" data-tab="settings">
-
-  <section class="settings columnflex nowrap center">
-    <label>Settings</label>
-
-    <div class="rowflex nowrap">
-      <span title="@{whisper}">Whisper rolls?</span>
-      <input name="data.whisper" title="@{whisper}" type="checkbox"  value="{{data.whisper}}">
-    </div>
-
-    <div class="rowflex nowrap">
-      <span title="@{show_name}">Show name in rolls?</span>
-      <select name="data.show_name" title="@{show_name}">
-        <option >Yes</option>
-        <option >No</option>
-      </select>
-    </div>
-
-    <div class="rowflex nowrap">
-      <a name="roll_hd" type="roll" title="%{hd}" >Short Rest</a>
-      <a name="roll_longrest" type="roll" title="%{longrest}" >Long Rest</a>
-      <a name="roll_td" type="roll" title="%{td}" >Tension Dice</a>
-    </div>
-    <div class="rowflex nowrap">
-      <label>Custom roll</label>
-    </div>
-    <div class="rowflex nowrap">
-      <a name="roll_custom1" type="roll" value="@{whisper}@{custom1}"></a>
-      <input type="text" name="data.custom1" >
-    </div>
-    <div class="rowflex nowrap">
-      <a name="roll_custom2" type="roll" value="@{whisper}@{custom2}"></a>
-      <input type="text" name="data.custom2" >
-    </div>
-    <div class="rowflex nowrap">
-      <a name="roll_custom3" type="roll" value="@{whisper}@{custom3}"></a>
-      <input type="text" name="data.custom3" >
-    </div>
-    <div class="rowflex nowrap">
-      <a name="roll_custom4" type="roll" value="@{whisper}@{custom4}"></a>
-      <input type="text" name="data.custom4" >
-    </div>
-  </section>
-
-  <section class="other columnflex nowrap center">
-    <label>Other stats</label>
-    <div class="rowflex nowrap">
-      <span>Eureka Points:</span>
-      <input name="data.eureka" type="number" placeholder="" title="Eureka Points: @{eureka}"  class="w40" value="{{data.eureka}}">
-      /
-      <input name="data.eureka_max" type="number" placeholder="" title="Max Eureka Points: @{eureka|max}" class="w40" value="{{data.eureka_max}}">
-    </div>
-    <div class="columnflex nowrap">
-      <span>Wounds/Ability Damage</span>
-      <textarea name="data.ability_damage" class="dmg"></textarea>
-    </div>
-  </section>
-
-  <section class="changelog columnflex nowrap center">
-
-  </section>
-
-
-  <div class="ammo">
-    <div class="section columnflex nowrap">
-      <label class=" other">NPC stuff</label>
-      <div class="rowflex nowrap">
-        <span>CR:</span>
-        <input name="data.cr" type="number" placeholder="" title="Challenge Rating: @{cr}"  class="w40" value="{{data.cr}}">
-        <span>Speed</span>
-        <input name="data.speed_npc" type="text" style="width:200px" placeholder="1m Fly(6m)" title="@{speed_npc}"  class="w40" value="{{data.speed_npc}}">
-      </div>
-      <div class="rowflex nowrap">
-        <span>Type:</span>
-        <input name="data.type" type="text" style="width:350px" placeholder="Medium Humanoid(Scout 2)" title="Challenge Rating: @{type}"  class="w40" value="{{data.type}}">
-      </div>
-    </div>
-
-    <div class="section columnflex nowrap">
-      <label class=" other">Living Series</label>
-      <div class="rowflex nowrap">
-        <span>Stargaterpg.com username</span>
-        <input name="data.living_series_user" type="text" placeholder=""  class="w40" style="width:100px" value="{{data.living_series_user}}">
-        <span title="You can see your Roll20 id by going to your Roll20 profile page, and copying the numbers in the URL">Roll20 ID</span>
-        <input name="data.roll20id" type="text" style="width:100px" title="You can see your Roll20 id by going to your Roll20 profile page, and copying the numbers in the URL"  class="w40" value="{{data.roll20id}}">
-      </div>
-      <div class="rowflex nowrap">
-        <span>Stargaterpg.com character link</span>
-        <input name="data.cahracter_link" type="text" style="width:350px" placeholder="The url to your character sheet"  class="w40" value="{{data.cahracter_link}}">
-      </div>
-    </div>
-
-    <div class="ammo grid">
-      <div class="section columnflex nowrap middle center">
-        <label>Ammo Weapon 1</label>
-        <input name="data.ammo1" type="number"  value="{{data.ammo1}}">
-      </div>
-      <div class="section columnflex nowrap middle center">
-        <label>Ammo Weapon 2</label>
-        <input name="data.ammo2" type="number"  value="{{data.ammo2}}">
-      </div>
-      <div class="section columnflex nowrap middle center">
-        <label>Ammo Weapon 3</label>
-        <input name="data.ammo3" type="number"  value="{{data.ammo3}}">
-      </div>
-      <div class="section columnflex nowrap middle center">
-        <label>Ammo Weapon 4</label>
-        <input name="data.ammo4" type="number"  value="{{data.ammo4}}">
-      </div>
-    </div>
-  </div>
-
-</main>
--->
-</div>
 </form>

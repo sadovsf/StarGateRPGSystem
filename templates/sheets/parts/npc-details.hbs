@@ -1,30 +1,38 @@
 <div class="flexrow">
     <div class="flexcol">
         <h2>Skills</h2>
-        {{#each data.skills as |skill s|}}
-            <div class="flexrow nowrap" data-skill="{{s}}">
-                <input data_type="skill_prof" name="data.skills.{{s}}.proficient" type="checkbox" {{checked skill.proficient}}>
-                <input data_type="skill_value" name="data.skills.{{s}}.value" class="flex0 w30" value="{{skill.value}}" style="width:">
-                <label class="resource-label">
-                    <a type="roll" class="txt-btn" data-bonus="data.skills.{{s}}.value">{{s}}</a>
-                </label>
-                <select data_type="skill_mod" name="data.skills.{{s}}.mod" class="skillModSelect">
-                    {{selectOptions ../config.abilities selected=skill.mod localize=false}}
+        {{#each system.skills as |skill s|}}
+        <div class="flexrow nowrap" data-skill="{{s}}">
+            <span class="mod">
+                <select name="system.skills.{{s}}.proficient" class="skillModSelect" data-dtype="Number">
+                    {{selectOptions ../selectables.proficiencySelects selected=skill.proficient localize=false}}
                 </select>
-                <span>
-                    <a class="skill-mod-revert" title="Revert to default attribute mod"><i class="fa fa-undo" style="font-size: 8px;"></i></a>
-                </span>
-            </div>
+            </span>
+            <input data_type="skill_value" name="system.skills.{{s}}.total" class="flex0 w30" value="{{skill.total}}" readonly>
+            <label class="resource-label">
+                <a type="roll" class="txt-btn" data-bonus="system.skills.{{s}}.total">{{s}}</a>
+            </label>
+            <select name="system.skills.{{s}}.attribute" class="skillModSelect" data-dtype="String">
+                {{selectOptions ../config.abilities selected=skill.attribute localize=false}}
+            </select>
+            <span>
+                <a class="skill-mod-revert" title="Revert to default attribute"><i class="fa fa-undo" style="font-size: 8px;"></i></a>
+            </span>
+        </div>
         {{/each}}
     </div>
     <div class="flexcol flex0">
         <h2>Saves</h2>
-        {{#each data.saves as |save s|}}
-            <div class="flexrow nowrap" data-save="{{s}}">
-                <input data_type="skill_prof" name="data.saves.{{s}}.proficient" type="checkbox" {{checked save.proficient}}>
-                <input name="data.saves.{{s}}.value" value="{{save.value}}" class="flex0 w30">
-                <a type="roll" class="txt-btn resource-label" data-bonus="data.saves.{{s}}.value">{{lookup ../config.saves s}}</a>
-            </div>
+        {{#each system.saves as |save s|}}
+        <div class="flexrow nowrap" data-save="{{s}}">
+            <span class="mod">
+                <select name="system.saves.{{s}}.proficient" data-dtype="Number">
+                    {{selectOptions ../selectables.proficiencySelects selected=save.proficient localize=false}}
+                </select>
+            </span>
+            <input value="{{save.totalVisual}}" class="flex0 w30" readonly>
+            <a type="roll" class="txt-btn resource-label" data-bonus="system.saves.{{s}}.total">{{lookup ../config.saves s}}</a>
+        </div>
         {{/each}}
         <div style="flex:1"></div>
     </div>

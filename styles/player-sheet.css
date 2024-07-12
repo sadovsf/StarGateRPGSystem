@@ -104,6 +104,10 @@
     font-size: 2em;
     font-weight: bold;
 }
+.charsheet input[type="text"].smallstat, .charsheet input[type="number"].smallstat {
+    font-size: 1.5em;
+    font-weight: bold;
+}
 .charsheet textarea:placeholder-shown, .charsheet input[type="text"]:placeholder-shown, .charsheet input[type="number"]:placeholder-shown {
     background-color: #eac9d1;
 }
@@ -175,11 +179,11 @@
 .charsheet main.page1 {
     display: grid;
     grid-template-columns: 4fr 8fr 5fr 6fr;
-    grid-template-rows: repeat(5, 2fr) 5fr 4fr;
-    grid-template-areas: "name name name name " "attr skills hp condition" "attr skills prof condition" "attr skills ac condition" "attr skills speed bulk " "attr skills saves inventory" "attr attacks attacks attacks ";
-    width: 850px;
+    grid-template-rows: repeat(5, 2fr) 5fr 4fr 4fr;
+    grid-template-areas: "name name name name " "attr skills hp condition" "attr skills prof condition" "attr skills ac condition" "attr skills speed bulk " "attr skills saves inventory" "attr armors armors armors" "attacks attacks attacks attacks";
+    width: 875px;
     height: 1000px;
-    background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Stargate-RPG/images/bg.png);
+    /* background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Stargate-RPG/images/bg.png); */
     background-repeat: no-repeat;
     background-size: 700px 700px;
     background-position: center;
@@ -190,9 +194,9 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas: "racial feats " "class equipment" "prof notes ";
-    width: 840px;
+    width: 865px;
     height: 990px;
-    background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Stargate-RPG/images/bg.png);
+    /* background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Stargate-RPG/images/bg.png); */
     background-repeat: no-repeat;
     background-size: 700px 700px;
     background-position: center;
@@ -216,9 +220,9 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: "settings other " "ammo changelog";
-    width: 840px;
+    width: 865px;
     height: 990px;
-    background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Stargate-RPG/images/bg.png);
+    /* background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Stargate-RPG/images/bg.png); */
     background-repeat: no-repeat;
     background-size: 700px 700px;
     background-position: center;
@@ -232,8 +236,21 @@
     text-align: center;
     width: 250px;
 }
+.charsheet main.page4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 2fr);
+    grid-template-areas: "skills hpsets hpsets hpsets" "skills acsets acsets acsets" "skills initsets initsets initsets" "skills miscsets miscsets miscsets" "skills . . . " ". . . .";
+    width: 865px;
+    height: 990px;
+    /* background-image: url(https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Stargate-RPG/images/bg.png); */
+    background-repeat: no-repeat;
+    background-size: 700px 700px;
+    background-position: center;
+    background-color: black;
+}
 
-.charsheet main.character, .charsheet main.background, .charsheet main.credits {
+.charsheet main.character, .charsheet main.background, .charsheet main.credits, .charsheet main.advanced {
     display: none;
 }
 .charsheet input.tabstoggle[value="character"] ~ main.character, .charsheet input.tabstoggle[value="background"] ~ main.background, .charsheet input.tabstoggle[value="credits"] ~ main.credits {
@@ -312,8 +329,6 @@
 }
 .charsheet section.skills span:not(.mod) {
     font-weight: bold;
-    font-size: 1.1em;
-    text-transform: uppercase;
     text-transform: uppercase;
     font-size: 0.7em;
     padding-top: 9px;
@@ -370,6 +385,7 @@
     grid-area: condition;
     padding-left: 10px;
     margin: 0px 5px 0px 0px;
+    width: 175px;
 }
 .charsheet section.condition span {
     text-transform: uppercase;
@@ -484,11 +500,17 @@
 .charsheet section.saves span.mod {
     width: 25px;
     margin-top: 4px;
-    border-style: none none solid none;
+    border-style: none none none none;
     margin-bottom: 4px;
+    margin-top: 4px;
     border-width: 2px;
     text-align: center;
     margin: 0px 4px;
+    text-align: center;
+}
+.charsheet section.saves span.mod select {
+    height: 15px;
+    font-size: 10px;
 }
 .charsheet section.saves input[type="number"] {
     margin-left: 5px;
@@ -516,12 +538,66 @@
 .charsheet .attacks {
     grid-area: attacks;
     display: unset;
-    grid-template-columns: 3.5fr repeat(5, 1fr) 2fr;
+    grid-template-columns: 3.5fr repeat(5, 1fr) 1fr;
     grid-template-rows: repeat(5, 1fr);
     margin: 0px 5px 10px 5px;
+    width: 830px;
 }
 .charsheet .attacks img {
     vertical-align: middle;
+}
+.charsheet .armors {
+    grid-area: armors;
+    display: unset;
+    grid-template-columns: 3.5fr repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    margin: 0px 5px 10px 5px;
+    width: 684px;
+}
+.charsheet .armors img {
+    vertical-align: middle;
+}
+
+.charsheet .sets {
+    display: unset;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    margin: 5px 5px 5px 5px;
+    width: 600px;
+}
+.charsheet .sets img {
+    vertical-align: middle;
+}
+.charsheet .sets .bold-text {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.charsheet .sets .equal {
+    max-width: 20px;
+}
+.charsheet .sets.double {
+    grid-template-rows: repeat(4, 1fr);
+}
+.charsheet .sets .setvisual {
+    max-width:110px;
+}
+.charsheet .sets .setinput {
+    max-width: 80px;
+}
+.charsheet .sets .span-margins span {
+    margin: 2px 5px 2px 5px;
+}
+.charsheet .hpsets {
+    grid-area: hpsets;
+}
+.charsheet .acsets {
+    grid-area: acsets;
+}
+.charsheet .initsets {
+    grid-area: initsets;
+}
+.charsheet .miscsets {
+    grid-area: miscsets;
 }
 
 .charsheet .background section {
@@ -601,4 +677,9 @@
 
 .charsheet .sg-sheet-body {
     display: block;
+}
+
+.charsheet .resource-label {
+    font-weight: bold;
+    text-transform: uppercase;
 }

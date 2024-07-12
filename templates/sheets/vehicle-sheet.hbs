@@ -11,29 +11,29 @@
             </h1>
             <div class="resources grid grid-4col">
                 <div class="resource flex-group-center">
-                    <label for="data.handling" class="resource-label">Tech level</label>
+                    <label for="system.handling" class="resource-label">Tech level</label>
                     <div class="resource-content flexrow flex-center flex-between">
-                        <input type="text" name="data.techLevel" value="{{data.techLevel}}" data-dtype="Number"/>
+                        <input onfocus="this.select();" type="text" name="system.techLevel" value="{{system.techLevel}}" data-dtype="Number"/>
                     </div>
                 </div>
                 <div class="resource flex-group-center">
-                    <label for="data.health.value" class="resource-label">HP</label>
+                    <label for="system.health.value" class="resource-label">HP</label>
                     <div class="resource-content flexrow flex-center flex-between">
-                        <input type="text" name="data.health.value" value="{{data.health.value}}" data-dtype="Number"/>
+                        <input onfocus="this.select();" type="text" name="system.health.value" value="{{system.health.value}}" data-dtype="Number"/>
                         <label>/</label>
-                        <input type="text" name="data.health.max" value="{{data.health.max}}" data-dtype="Number"/>
+                        <input onfocus="this.select();" type="text" name="system.health.maxBonus" value="{{system.health.maxBonus}}" data-dtype="Number"/>
                     </div>
                 </div>
                 <div class="resource flex-group-center">
-                    <label for="data.ac" class="resource-label">Armor class</label>
+                    <label for="system.ac" class="resource-label">Armor class</label>
                     <div class="resource-content flexrow flex-center flex-between">
-                        <input type="text" name="data.ac" value="{{data.ac}}" data-dtype="Number"/>
+                        <input onfocus="this.select();" type="text" name="system.acBonus" value="{{system.acBonus}}" data-dtype="Number"/>
                     </div>
                 </div>
                 <div class="resource flex-group-center">
-                    <label for="data.handling" class="resource-label">Handling</label>
+                    <label for="system.handling" class="resource-label">Handling</label>
                     <div class="resource-content flexrow flex-center flex-between">
-                        <input type="text" name="data.handling" value="{{data.handling}}" data-dtype="Number"/>
+                        <input onfocus="this.select();" type="text" name="system.handling" value="{{system.handling}}" data-dtype="Number"/>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
     <section class="sg-sheet-body flexcol">
         <div class="tab flexcol description" data-tab="description">
             <div class="flexrow">
-                {{editor content=data.description target="data.description" button=true owner=owner editable=editable rollData=rollData}}
+                {{editor system.description target="system.description" button=true owner=owner editable=editable rollData=rollData}}
             </div>
             <div class="attacks" style="flex: 1">
                 {{> "systems/sgrpg/templates/sheets/parts/actor-weapon-inventory.hbs"}}

@@ -2,36 +2,49 @@
     <div class="flexcol details-column">
         {{!-- Attack details left column --}}
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.details.type">Bulk</label>
-            <input type="text" name="data.bulk" value="{{data.bulk}}" data-dtype="Number"/>
+            <label class="attribute-label" for="system.details.type">Bulk</label>
+            <input type="text" name="system.bulk" value="{{system.bulk}}" data-dtype="Number" />
         </div>
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.details.type">Attack type</label>
-            <select name="data.details.type">
-                {{selectOptions config.attackTypes selected=data.details.type localize=false}}
+            <label class="attribute-label" for="system.quantity">Quantity</label>
+            <input name="system.quantity" type="text" value="{{system.quantity}}" data-dtype="Number" />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.details.type">Attack type</label>
+            <select name="system.details.type">
+                {{selectOptions config.attackTypes selected=system.details.type localize=false}}
             </select>
         </div>
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.details.sec_type">Sec.attack type</label>
-            <select name="data.details.sec_type">
+            <label class="attribute-label" for="system.details.sec_type">Sec.attack type</label>
+            <select name="system.details.sec_type">
                 <option value=""></option>
-                {{selectOptions config.attackTypes selected=data.details.sec_type localize=false}}
+                {{selectOptions config.attackTypes selected=system.details.sec_type localize=false}}
             </select>
         </div>
 
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.attackAbility">Attack mod</label>
-            <select name="data.attackAbility">
-                {{selectOptions config.abilities selected=data.attackAbility localize=false}}
+            <label class="attribute-label" for="system.attackAbility">Attack mod</label>
+            <select name="system.attackAbility">
+                {{selectOptions config.abilities selected=system.attackAbility localize=false}}
             </select>
         </div>
 
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.details.range.normal">Range</label>
+            <label class="attribute-label" for="system.range.short">Range</label>
             <div class="flexrow flex-center flex-between">
-                <input type="text" name="data.details.range.normal" value="{{data.details.range.normal}}" data-dtype="Number"/>
+                <input type="text" name="system.range.short" value="{{system.range.short}}" data-dtype="Number" />
                 <span> / </span>
-                <input type="text" name="data.details.range.max" value="{{data.details.range.max}}" data-dtype="Number"/>
+                <input type="text" name="system.range.long" value="{{system.range.long}}" data-dtype="Number" />
+            </div>
+        </div>
+
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.range.shortBonus">Range Bonus</label>
+            <div class="flexrow flex-center flex-between">
+                <input type="text" name="system.range.shortBonus" value="{{system.range.shortBonus}}" data-dtype="String" />
+                <span> / </span>
+                <input type="text" name="system.range.longBonus" value="{{system.range.longBonus}}" data-dtype="String" />
             </div>
         </div>
 
@@ -39,31 +52,31 @@
         <div class="details-entry grid grid-2col">
             <label>Target</label>
             <div class="form-fields">
-                <input type="text" name="data.target.value" style="width: 25%" value="{{data.target.value}}" data-dtype="Number" placeholder="-"/>
-                <select name="data.target.type" style="width: 75%">
-                    {{#select data.target.type}}
-                        <option value=""></option>
-                        {{#each config.targetTypes as |name key|}}
-                            <option value="{{key}}">{{name}}</option>
-                        {{/each}}
+                <input type="text" name="system.target.value" style="width: 25%" value="{{system.target.value}}" data-dtype="Number" placeholder="-" />
+                <select name="system.target.type" style="width: 75%">
+                    {{#select system.target.type}}
+                    <option value=""></option>
+                    {{#each config.targetTypes as |name key|}}
+                    <option value="{{key}}">{{name}}</option>
+                    {{/each}}
                     {{/select}}
                 </select>
             </div>
         </div>
 
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.atkSnd" title="Leave empty for the default">Attack sound</label>
+            <label class="attribute-label" for="system.atkSnd" title="Leave empty for the default">Attack sound</label>
             <div class="form-fields nowrap">
-                <button type="button" class="file-picker" data-type="audio" data-target="data.atkSnd">Pick</button>
-                <input type="text" name="data.atkSnd" value="{{data.atkSnd}}" data-dtype="String" />
+                <button type="button" class="file-picker" data-type="audio" data-target="system.atkSnd">Pick</button>
+                <input type="text" name="system.atkSnd" value="{{system.atkSnd}}" data-dtype="String" />
             </div>
         </div>
 
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.dmgSnd" title="Leave empty for the default">Damage sound</label>
+            <label class="attribute-label" for="system.dmgSnd" title="Leave empty for the default">Damage sound</label>
             <div class="form-fields nowrap">
-                <button type="button" class="file-picker" data-type="audio" data-target="data.dmgSnd">Pick</button>
-                <input type="text" name="data.dmgSnd" value="{{data.dmgSnd}}" data-dtype="String" />
+                <button type="button" class="file-picker" data-type="audio" data-target="system.dmgSnd">Pick</button>
+                <input type="text" name="system.dmgSnd" value="{{system.dmgSnd}}" data-dtype="String" />
             </div>
         </div>
 
@@ -73,41 +86,47 @@
     <div class="flexcol details-column">
         {{!-- Attack details right column --}}
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.details.special">Special</label>
-            <input type="text" name="data.details.special" value="{{data.details.special}}" data-dtype="String"/>
+            <label class="attribute-label" for="system.details.special">Special</label>
+            <input type="text" name="system.details.special" value="{{system.details.special}}" data-dtype="String" />
         </div>
 
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.ammo.value">Ammo</label>
+            <label class="attribute-label" for="system.ammo.value">Ammo</label>
             <div class="flexrow flex-center flex-between">
-                <input type="text" name="data.ammo.value" value="{{data.ammo.value}}" data-dtype="Number"/>
+                <input type="number" name="system.ammo.value" value="{{system.ammo.value}}" data-dtype="Number" />
                 <span>/</span>
-                <input type="text" name="data.ammo.max" value="{{data.ammo.max}}" data-dtype="Number"/>
+                <input type="number" name="system.ammo.max" value="{{system.ammo.max}}" data-dtype="Number" />
             </div>
         </div>
+        {{#unless (consumesAmmo item)}}
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.ammo.bulk">Ammo unit bulk</label>
-            <input type="text" name="data.ammo.bulk" value="{{data.ammo.bulk}}" data-dtype="Number"/>
+            <label class="attribute-label" for="system.ammo.bulk">Ammo unit bulk</label>
+            <input type="number" name="system.ammo.bulk" value="{{system.ammo.bulk}}" data-dtype="Number" />
         </div>
+        <div class="details-entry grid grid-2col" title="Empty or -2 for untracked / infinite magazines, -1 for a single-shot weapon tracked by quantity">
+            <label class="attribute-label" for="system.ammo.extraMags">Extra magazines</label>
+            <input type="number" name="system.ammo.extraMags" value="{{system.ammo.extraMags}}" data-dtype="Number" />
+        </div>
+        {{/unless}}
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.ammo.target">Reload Consumable</label>
-            <select name="data.ammo.target">
-                {{#select data.ammo.target}}
-                    <option value=""></option>
-                    <option value="{{config.actionReloadValue}}">[Action based reload]</option>
-                    {{#each abilityConsumptionTargets as |name key|}}
-                        <option value="{{key}}">{{name}}</option>
-                    {{/each}}
+            <label class="attribute-label" for="system.ammo.target">Reload Consumable</label>
+            <select name="system.ammo.target">
+                {{#select system.ammo.target}}
+                <option value=""></option>
+                <option value="{{config.actionReloadValue}}">[Action based reload]</option>
+                {{#each abilityConsumptionTargets as |name key|}}
+                <option value="{{key}}">{{name}}</option>
+                {{/each}}
                 {{/select}}
             </select>
         </div>
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.ammo.reload">Reload</label>
-            <input type="text" name="data.ammo.reload" value="{{data.ammo.reload}}" data-dtype="String"/>
+            <label class="attribute-label" for="system.ammo.reload">Reload</label>
+            <input type="text" name="system.ammo.reload" value="{{system.ammo.reload}}" data-dtype="String" />
         </div>
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.isProficient">Has proficiency</label>
-            <input type="checkbox" name="data.isProficient" {{checked data.isProficient}} />
+            <label class="attribute-label" for="system.isProficient">Has proficiency</label>
+            <input type="checkbox" name="system.isProficient" {{checked system.isProficient}} />
         </div>
     </div>
 </div>

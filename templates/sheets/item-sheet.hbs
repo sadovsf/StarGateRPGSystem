@@ -3,16 +3,34 @@
     <header class="sheet-header">
         {{!-- Header stuff goes here --}}
         <div class="flexcol image-col">
-            <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="70" width="70"/>
+            <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="70" width="70" />
         </div>
         <div class="header-fields">
             <h1 class="charname flexrow">
-                <input name="name" type="text" value="{{item.name}}" placeholder="Name"/>
+                <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
             </h1>
-            {{#if isWeapon}}
-                {{> "systems/sgrpg/templates/sheets/parts/weapon-header.hbs"}}
-            {{else}}
-                {{> "systems/sgrpg/templates/sheets/parts/equip-header.hbs"}}
+            <div class="flexrow flex-group-center">
+                <div class="resource flex-center flexrow" style="max-width:40%">
+                    <label class="resource-label">Carried</label>
+                    <div class="resource-content flexrow flex-center flex-between">
+                        <input name="system.carried" type="checkbox" {{checked system.carried}} data-dtype="Boolean" />
+                    </div>
+                </div>
+                <div class="resource flex-center flexrow">
+                    <label class="resource-label">Part of Base Kit</label>
+                    <div class="resource-content flexrow flex-center flex-between">
+                        <input name="system.partOfBaseKit" type="checkbox" {{checked system.partOfBaseKit}} data-dtype="Boolean" />
+                    </div>
+                </div>
+            </div>
+            {{#if (equalTo item.type "weapon")}}
+            {{> "systems/sgrpg/templates/sheets/parts/weapon-header.hbs"}}
+            {{/if}}
+            {{#if (equalTo item.type "equip")}}
+            {{> "systems/sgrpg/templates/sheets/parts/equip-header.hbs"}}
+            {{/if}}
+            {{#if (equalTo item.type "armor")}}
+            {{> "systems/sgrpg/templates/sheets/parts/armor-header.hbs"}}
             {{/if}}
         </div>
     </header>
@@ -21,18 +39,28 @@
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item active" data-tab="description">Description</a>
         <a class="item" data-tab="details">Details</a>
+        {{#if (equalTo item.type "weapon")}}<a class="item" data-tab="firingTypes">Firing Types</a>{{/if}}
     </nav>
 
     <section class="sheet-body flexcol">
         <div class="tab flexrow description" data-tab="description">
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable rollData=rollData}}
+            {{editor editorData.description target="system.description" button=true owner=owner editable=editable rollData=rollData}}
         </div>
         <div class="tab flexrow details" data-tab="details">
-            {{#if isWeapon}}
-                {{> "systems/sgrpg/templates/sheets/parts/weapon-details.hbs"}}
-            {{else}}
-                {{> "systems/sgrpg/templates/sheets/parts/equip-details.hbs"}}
+            {{#if (equalTo item.type "weapon")}}
+            {{> "systems/sgrpg/templates/sheets/parts/weapon-details.hbs"}}
+            {{/if}}
+            {{#if (equalTo item.type "equip")}}
+            {{> "systems/sgrpg/templates/sheets/parts/equip-details.hbs"}}
+            {{/if}}
+            {{#if (equalTo item.type "armor")}}
+            {{> "systems/sgrpg/templates/sheets/parts/armor-details.hbs"}}
             {{/if}}
         </div>
+        {{#if (equalTo item.type "weapon")}}
+        <div class="tab flexrow firingTypes details" data-tab="firingTypes">
+            {{> "systems/sgrpg/templates/sheets/parts/weapon-firing-modes.hbs"}}
+        </div>
+        {{/if}}
     </section>
 </form>

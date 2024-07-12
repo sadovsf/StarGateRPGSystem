@@ -1,28 +1,53 @@
-<div class="sgrpg chat-card item-card" data-actor-id="{{actor._id}}" data-item-id="{{item._id}}" {{#if tokenId}}data-token-id="{{tokenId}}"{{/if}}>
+<div class="sgrpg chat-card item-card" data-actor-id="{{actor._id}}" data-item-id="{{item._id}}" {{#if tokenId}} data-token-id="{{tokenId}}" {{/if}}>
     <header class="card-header flexrow">
-        <img src="{{item.img}}" title="{{item.name}}" width="36" height="36"/>
+        <img src="{{item.img}}" title="{{item.name}}" width="36" height="36" />
         <h3 class="item-name">{{item.name}}</h3>
     </header>
 
-    <div class="card-content">
-        {{{data.description}}}
+    <div class="card-content" {{#if showDescription}} style="display: block;" {{else}} style="display: none;" {{/if}}>
+        {{{system.description}}}
     </div>
 
     <div class="card-buttons">
         {{#if hasAttack}}
-            <button data-action="attack">Attack</button>
-            <button data-action="damage">Damage</button>
+        <div class="flexrow">
+            <button data-action="attack" data-mode="single">Attack</button>
+            <button data-action="damage" data-mode="single">Damage</button>
+        </div>
+        {{#if system.burstAttack.able}}
+        <div class="flexrow">
+            <button data-action="attack" data-mode="burst">Burst Attack</button>
+            <button data-action="damage" data-mode="burst">Burst Damage</button>
+        </div>
+        {{/if}}
+        {{#if system.autoAttack.able}}
+        <div class="flexrow">
+            <button data-action="attack" data-mode="fullAuto">Full Auto Attack</button>
+            <button data-action="damage" data-mode="fullAuto">Full Auto Damage</button>
+        </div>
+        {{#if tensionHomebrew}}
+        <div class="flexrow" data-max-full-auto="{{maxAutoCount}}" data-use-auto-balance="{{system.autoAttack.autoBalanceFullAuto}}">
+            <input class="autoAttackCount full-auto-count" type="number" value="0" data-dtype="Number" onfocus="this.select();" />
+            <input class="autoDamageCount full-auto-count" type="number" value="{{maxAutoCount}}" data-dtype="Number" onfocus="this.select();" />
+        </div>
         {{else}}
-            <button data-action="consume">Consume</button>
+        <div class="flexrow">
+            <span class="item-name">Full Auto Count</span>
+            <input class="autoDamageCount" type="number" value="{{maxAutoCount}}" data-dtype="Number" onfocus="this.select();" />
+        </div>
+        {{/if}}
+        {{/if}}
+        {{else}}
+        <button data-action="consume">Consume</button>
         {{/if}}
         {{#if hasAreaTarget}}
-            <button data-action="placeTemplate">Place template</button>
+        <button data-action="placeTemplate">Place template</button>
         {{/if}}
     </div>
 
     <footer class="card-footer">
-        {{#each data.labels}}
-            <span>{{this}}</span>
+        {{#each system.labels}}
+        <span>{{this}}</span>
         {{/each}}
     </footer>
 </div>

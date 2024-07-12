@@ -1,0 +1,71 @@
+<div class="grid grid-2col">
+    <div class="flexcol details-column">
+        {{!-- Attack details left column --}}
+        <h2 class="details-entry">Burst Fire</h2>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.burstAttack.able">Can burst</label>
+            <input type="checkbox" name="system.burstAttack.able" {{checked system.burstAttack.able}} data-dtype="Boolean" />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.burstAttack.ammoCost">Ammo Cost</label>
+            <input type="number" name="system.burstAttack.ammoCost" value="{{system.burstAttack.ammoCost}}" data-dtype="Number" />
+        </div>
+
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.burstAttack.atkSnd" title="Leave empty for the default">Attack sound</label>
+            <div class="form-fields nowrap">
+                <button type="button" class="file-picker" data-type="audio" data-target="system.burstAttack.atkSnd">Pick</button>
+                <input type="text" name="system.burstAttack.atkSnd" value="{{system.burstAttack.atkSnd}}" data-dtype="String" />
+            </div>
+        </div>
+
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.burstAttack.dmgSnd" title="Leave empty for the default">Damage sound</label>
+            <div class="form-fields nowrap">
+                <button type="button" class="file-picker" data-type="audio" data-target="system.burstAttack.dmgSnd">Pick</button>
+                <input type="text" name="system.burstAttack.dmgSnd" value="{{system.burstAttack.dmgSnd}}" data-dtype="String" />
+            </div>
+        </div>
+
+        <div class="flex1"></div>
+    </div>
+
+    <div class="flexcol details-column">
+        {{!-- Attack details right column --}}
+        <h2 class="details-entry">Full Auto Fire</h2>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.autoAttack.able">Can full auto</label>
+            <input type="checkbox" name="system.autoAttack.able" {{checked system.autoAttack.able}} data-dtype="Boolean" />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.autoAttack.ammoCost">Ammo Cost</label>
+            <input type="number" name="system.autoAttack.ammoCost" value="{{system.autoAttack.ammoCost}}" data-dtype="Number" />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.autoAttack.stabilized">Compensated</label>
+            <input type="checkbox" name="system.autoAttack.stabilized" {{checked system.autoAttack.stabilized}} data-dtype="Boolean" />
+        </div>
+        {{#if homebrewSettings.allowWeaponTensionOnAttack}}
+        <div class="details-entry grid grid-2col" title="If enabled, the chat card will keep the balance between attack and damage tension dice equal to max fire">
+            <label class="attribute-label" for="system.autoAttack.autoBalanceFullAuto">Automatically balance in chat</label>
+            <input type="checkbox" name="system.autoAttack.autoBalanceFullAuto" {{checked system.autoAttack.autoBalanceFullAuto}} data-dtype="Boolean" />
+        </div>
+        {{/if}}
+
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.autoAttack.atkSnd" title="Leave empty for the default">Attack sound</label>
+            <div class="form-fields nowrap">
+                <button type="button" class="file-picker" data-type="audio" data-target="system.autoAttack.atkSnd">Pick</button>
+                <input type="text" name="system.autoAttack.atkSnd" value="{{system.autoAttack.atkSnd}}" data-dtype="String" />
+            </div>
+        </div>
+
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.autoAttack.dmgSnd" title="Leave empty for the default">Damage sound</label>
+            <div class="form-fields nowrap">
+                <button type="button" class="file-picker" data-type="audio" data-target="system.autoAttack.dmgSnd">Pick</button>
+                <input type="text" name="system.autoAttack.dmgSnd" value="{{system.autoAttack.dmgSnd}}" data-dtype="String" />
+            </div>
+        </div>
+    </div>
+</div>

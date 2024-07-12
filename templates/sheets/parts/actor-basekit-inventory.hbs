@@ -2,16 +2,16 @@
 <table class="item-list inventory">
     <thead>
         <tr>
-            <th class="bold"><a class="txt-btn item-create" data-type="equip">Create New Item <i class="fas fa-plus"></i></a></th>
-            <th></th>
+            <th class="bold">Disable Base Kit</th>
+            <th><input type="checkbox" name="system.baseKitDisabled" data-dtype="Boolean" {{checked system.baseKitDisabled}} /></th>
         </tr>
         <tr>
-            <th class="bold">Name</th>
+            <th class="bold"><a class="txt-btn item-empty-inventory" data-type="equip">Clear Non-base Items <i class="fas fa-trash"></i></a></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        {{#each actor.gear as |item|}}
+        {{#each actor.basekit as |item|}}
         <tr class="inventory-item item" data-item-id="{{item._id}}">
             <td>
                 <a class="item-control item-roll"><span class="item-image" style="background-image: url({{item.img}})"></span></a>

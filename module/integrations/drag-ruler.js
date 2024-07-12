@@ -9,7 +9,7 @@ Hooks.once("dragRuler.ready", (SpeedProvider) => {
         }
 
         getRanges(token) {
-            const walkspeed = token.actor?.data.data.speed || 0;
+            const walkspeed = token.actor?.system.speed || 0;
             const dashspeed = walkspeed * 2;
 
             const ranges = [

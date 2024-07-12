@@ -1,0 +1,40 @@
+<div class="grid grid-2col">
+    <div class="flexcol details-column">
+        {{!-- Armor details left column --}}
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.bulk">Bulk</label>
+            <input type="number" name="system.bulk" value="{{system.bulk}}" data-dtype="Number" />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.quantity">Quantity</label>
+            <input name="system.quantity" type="number" value="{{system.quantity}}" data-dtype="Number" />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.strRequired">Strength Required</label>
+            <input type="number" name="system.strRequired" value="{{system.strRequired}}" data-dtype="Number" />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.techLevel">Tech Level</label>
+            <input type="number" name="system.techLevel" value="{{system.techLevel}}" data-dtype="Number" />
+        </div>
+        <div class="flex1"></div>
+    </div>
+
+    <div class="flexcol details-column">
+        {{!-- Armor details right column --}}
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.heavyArmor">Heavy Armor</label>
+            <input type="checkbox" name="system.heavyArmor" {{checked system.heavyArmor}} />
+        </div>
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.additive">Additive</label>
+            <input type="checkbox" name="system.additive" {{checked system.additive}} />
+        </div>
+
+        <div class="details-entry grid grid-2col">
+            <label class="attribute-label" for="system.details.special">Special</label>
+            <input type="text" name="system.details.special" value="{{system.details.special}}" data-dtype="String" />
+        </div>
+        <div class="flex1"></div>
+    </div>
+</div>

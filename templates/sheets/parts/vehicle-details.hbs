@@ -2,18 +2,18 @@
     <div class="flexcol details-column">
         {{!-- Details left column --}}
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.speed">Bulk capacity</label>
-            <input name="data.bulk" value="{{data.bulk}}" data-dtype="Number" />
+            <label class="attribute-label" for="system.speed">Bulk capacity</label>
+            <input name="system.bulkBonus" value="{{system.bulkBonus}}" data-dtype="Number" />
         </div>
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.size">Size</label>
-            <select name="data.size">
-                {{selectOptions config.sizes selected=data.size localize=false}}
+            <label class="attribute-label" for="system.size">Size</label>
+            <select name="system.size">
+                {{selectOptions config.sizes selected=system.size localize=false}}
             </select>
         </div>
         <div class="details-entry grid grid-2col">
-            <label class="attribute-label" for="data.speed">Speed</label>
-            <input name="data.speed" value="{{data.speed}}" data-dtype="Number" />
+            <label class="attribute-label" for="system.speed">Speed</label>
+            <input name="system.speedBase" value="{{system.speedBase}}" data-dtype="Number" />
         </div>
         <div class="flex1"></div>
     </div>

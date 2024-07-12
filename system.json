@@ -1,33 +1,44 @@
 {
-    "name": "sgrpg",
-    "title": "Stargate RPG",
-    "description": "System for Stargate RPG created by Wyvern Gaming, https://stargatetherpg.com/",
-    "version": "1.6.1-beta",
-    "templateVersion": 2,
-    "author": "Filip Sádovský",
-    "minimumCoreVersion": "0.8.6",
-    "compatibleCoreVersion": "0.8.9",
-    "scripts": [
-    ],
-    "esmodules": [
-        "sgrpg.js"
-    ],
-    "styles": [
-        "styles/sgrpg.css",
-        "styles/player-sheet.css",
-        "styles/item-sheet.css"
-    ],
-    "packs": [],
-    "dependencies": [],
-    "languages": [],
-    "socket": false,
-    "initiative": "1d20 + @initiative",
-    "gridDistance": 1,
-    "gridUnits": "m",
-    "primaryTokenAttribute": "attributes.health",
-    "secondaryTokenAttribute": null,
-    "url": "https://github.com/sadovsf/StargateRPGSystem",
-    "manifest": "https://raw.githubusercontent.com/sadovsf/StargateRPGSystem/master/system.json",
-    "download": "https://github.com/sadovsf/StargateRPGSystem/releases/download/v1.6.1-beta/sgrpg.zip"
+  "id": "sgrpg",
+  "name": "sgrpg",
+  "title": "Stargate RPG",
+  "description": "System for Stargate RPG created by Wyvern Gaming, https://stargatetherpg.com/",
+  "version": "1.9.0",
+  "templateVersion": 10,
+  "authors": [
+    {
+      "name": "Filip Sádovský"
+    },
+    {
+      "name": "Hertzila",
+      "url": "https://github.com/Hertzila"
+    }
+  ],
+  "compatibility": {
+    "minimum": "10.291",
+    "verified": 10,
+    "maximum": 10
+  },
+  "minimumCoreVersion": "10",
+  "scripts": [
+  ],
+  "esmodules": [
+    "sgrpg.js"
+  ],
+  "styles": [
+    "styles/sgrpg.css",
+    "styles/player-sheet.css",
+    "styles/item-sheet.css"
+  ],
+  "packs": [],
+  "languages": [],
+  "socket": false,
+  "initiative": "1d20 + @initiative",
+  "gridDistance": 1,
+  "gridUnits": "m",
+  "primaryTokenAttribute": "health",
+  "secondaryTokenAttribute": null,
+  "url": "https://github.com/Hertzila/StargateRPGSystem",
+  "manifest": "https://github.com/Hertzila/StargateRPGSystem/releases/latest/download/system.json",
+  "download": "https://github.com/Hertzila/StargateRPGSystem/releases/download/v1.7.5/system.zip"
 }
-

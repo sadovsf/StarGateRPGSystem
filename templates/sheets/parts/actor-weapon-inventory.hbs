@@ -1,39 +1,39 @@
 <table class="item-list inventory">
-  <thead>
-    <tr>
-      <th class="bold">Weapon</th>
-      <th class="bold">To hit</th>
-      <th class="bold">DMG</th>
-      <th class="bold">Type</th>
-      <th class="bold">Range</th>
-      <th class="bold">Special</th>
-      <th class="bold">Ammo</th>
-      <th></th>
-    </tr>
-  </thead>
+    <thead>
+        <tr>
+            <th class="bold">Weapon</th>
+            <th class="bold">To hit</th>
+            <th class="bold">DMG</th>
+            <th class="bold">Type</th>
+            <th class="bold">Range</th>
+            <th class="bold">Special</th>
+            <th class="bold">Ammo</th>
+            <th></th>
+        </tr>
+    </thead>
 
-<!-- attacks -->
-  <tbody>
-    {{#each items.weapon as |item|}}
-    <tr class="item inventory-item" data-item-id="{{item._id}}" draggable="true">
-      <td>
-        <a class="item-control item-roll"><span class="item-image" style="background-image: url({{item.img}})"></span></a>
-        {{item.name}}
-      </td>
-      <td>{{item.data.toHit}}</td>
-      <td>{{item.data.dmg}}</td>
-      <td>{{item.data.details.type}}</td>
-      <td>{{item.data.details.range.normal}}/{{item.data.details.range.max}}</td>
-      <td>{{item.data.details.special}}</td>
-      <td>{{item.data.ammo.value}}</td>
-      <td>
-        {{#if item.hasAmmo}}
-          <a class="item-control item-reload" title="Reload magazine"><i class="fas fa-retweet"></i></a>
-        {{/if}}
-        <a class="item-control item-edit"><i class="fas fa-edit"></i></a>
-        <a class="item-control item-delete"><i class="fas fa-trash"></i></a>
-      </td>
-    </tr>
-    {{/each}}
-  </tbody>
+    <!-- attacks -->
+    <tbody>
+        {{#each actor.weapons as |item|}}
+        <tr class="item inventory-item" data-item-id="{{item._id}}" draggable="true">
+            <td>
+                <a class="item-control item-roll"><span class="item-image" style="background-image: url({{item.img}})"></span></a>
+                {{item.name}}
+            </td>
+            <td class="flex-center">{{item.system.visualToHit}}</td>
+            <td class="flex-center">{{item.system.dmg}}</td>
+            <td class="flex-center">{{item.system.details.type}}</td>
+            <td class="flex-center">{{item.system.range.short}}/{{item.system.range.long}}</td>
+            <td class="flex-center">{{item.system.details.special}}</td>
+            <td class="flex-center">{{item.system.visualAmmo}}</td>
+            <td>
+                {{#if item.system.hasAmmo}}{{#if item.system.ammo.reload}}
+                <a class="item-control item-reload" title="Reload magazine: {{item.system.ammo.reload}}"><i class="fas fa-retweet"></i></a>
+                {{/if}}{{/if}}
+                <a class="item-control item-edit"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
 </table>

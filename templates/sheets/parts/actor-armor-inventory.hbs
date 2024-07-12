@@ -1,0 +1,34 @@
+<table class="item-list inventory">
+    <thead>
+        <tr>
+            <th class="bold">Armor</th>
+            <th class="bold">Worn?</th>
+            <th class="bold">AC</th>
+            <th class="bold">Bulk Max</th>
+            <th class="bold">Type</th>
+            <th class="bold">Special</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <!-- attacks -->
+    <tbody>
+        {{#each actor.armors as |item|}}
+        <tr class="item inventory-item" data-item-id="{{item._id}}" draggable="true">
+            <td>
+                <a class="item-control item-roll"><span class="item-image" style="background-image: url({{item.img}})"></span></a>
+                {{item.name}}
+            </td>
+            <td class="flex-center">{{#if item.system.worn}}Worn{{else}}Off{{/if}}</td>
+            <td class="flex-center">{{item.system.visualAC}}</td>
+            <td class="flex-center">{{item.system.bulkBonus}}</td>
+            <td class="flex-center">{{#if item.system.heavyArmor}}Heavy{{else}}Light{{/if}}</td>
+            <td class="flex-center">{{item.system.details.special}}</td>
+            <td>
+                <a class="item-control item-edit"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

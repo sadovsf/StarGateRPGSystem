@@ -10,172 +10,184 @@
  *
  */
 export default class DamageRoll extends Roll {
-  constructor(formula, data, options) {
-    super(formula, data, options);
-    // For backwards compatibility, skip rolls which do not have the "critical" option defined
-    if ( this.options.critical !== undefined ) this.configureDamage();
-  }
+    constructor(formula, data, options) {
+        super(formula, data, options);
+        // For backwards compatibility, skip rolls which do not have the "critical" option defined
+        if (this.options.critical !== undefined) this.configureDamage();
+    }
 
-  /**
-   * The HTML template path used to configure evaluation of this Roll
-   * @type {string}
-   */
-  static EVALUATION_TEMPLATE = "systems/sgrpg/templates/chat/roll-dialog.html";
+    /**
+     * The HTML template path used to configure evaluation of this Roll
+     * @type {string}
+     */
+    static EVALUATION_TEMPLATE = "systems/sgrpg/templates/chat/roll-dialog.html";
 
-  /* -------------------------------------------- */
+    /* -------------------------------------------- */
 
-  /**
-   * A convenience reference for whether this DamageRoll is a critical hit
-   * @type {boolean}
-   */
-  get isCritical() {
-    return this.options.critical;
-  }
+    /**
+     * A convenience reference for whether this DamageRoll is a critical hit
+     * @type {boolean}
+     */
+    get isCritical() {
+        return this.options.critical;
+    }
 
-  /* -------------------------------------------- */
-  /*  Damage Roll Methods                         */
-  /* -------------------------------------------- */
+    /* -------------------------------------------- */
+    /*  Damage Roll Methods                         */
+    /* -------------------------------------------- */
 
-  /**
-   * Apply optional modifiers which customize the behavior of the d20term
-   * @private
-   */
-  configureDamage() {
-    let flatBonus = 0;
-    for ( let [i, term] of this.terms.entries() ) {
+    /**
+     * Apply optional modifiers which customize the behavior of the d20term
+     * @private
+     */
+    configureDamage() {
+        let flatBonus = 0;
+        for (let [i, term] of this.terms.entries()) {
 
-      // Multiply dice terms
-      if ( term instanceof DiceTerm ) {
-        term.options.baseNumber = term.options.baseNumber ?? term.number; // Reset back
-        term.number = term.options.baseNumber;
-        if ( this.isCritical ) {
-          let cm = this.options.criticalMultiplier ?? 2;
+            // Multiply dice terms
+            if (term instanceof DiceTerm) {
+                term.options.baseNumber = term.options.baseNumber ?? term.number; // Reset back
+                term.number = term.options.baseNumber;
+                if (this.isCritical) {
+                    let cm = this.options.criticalMultiplier ?? 2;
 
-          // Powerful critical - maximize damage and reduce the multiplier by 1
-          if ( this.options.powerfulCritical ) {
-            flatBonus += (term.number * term.faces);
-            cm = Math.max(1, cm-1);
-          }
+                    // Powerful critical - maximize damage and reduce the multiplier by 1
+                    if (this.options.powerfulCritical) {
+                        flatBonus += (term.number * term.faces);
+                        cm = Math.max(1, cm - 1);
+                    }
 
-          // Alter the damage term
-          let cb = (this.options.criticalBonusDice && (i === 0)) ? this.options.criticalBonusDice : 0;
-          term.alter(cm, cb);
-          term.options.critical = true;
+                    // Alter the damage term
+                    let cb = (this.options.criticalBonusDice && (i === 0)) ? this.options.criticalBonusDice : 0;
+                    term.alter(cm, cb);
+                    term.options.critical = true;
+                }
+
+            }
+
+            // Multiply numeric terms
+            else if (this.options.multiplyNumeric && (term instanceof NumericTerm)) {
+                term.options.baseNumber = term.options.baseNumber ?? term.number; // Reset back
+                term.number = term.options.baseNumber;
+                if (this.isCritical) {
+                    term.number *= (this.options.criticalMultiplier ?? 2);
+                    term.options.critical = true;
+                }
+            }
         }
 
-      }
-
-      // Multiply numeric terms
-      else if ( this.options.multiplyNumeric && (term instanceof NumericTerm)  ) {
-        term.options.baseNumber = term.options.baseNumber ?? term.number; // Reset back
-        term.number = term.options.baseNumber;
-        if ( this.isCritical ) {
-          term.number *= (this.options.criticalMultiplier ?? 2);
-          term.options.critical = true;
+        // Add powerful critical bonus
+        if (this.options.powerfulCritical && (flatBonus > 0)) {
+            this.terms.push(new OperatorTerm({ operator: "+" }));
+            this.terms.push(new NumericTerm({ number: flatBonus }, { flavor: "PowerfulCritical" }));
         }
-      }
+
+        // Re-compile the underlying formula
+        this._formula = this.constructor.getFormula(this.terms);
     }
 
-    // Add powerful critical bonus
-    if ( this.options.powerfulCritical && (flatBonus > 0) ) {
-      this.terms.push(new OperatorTerm({operator: "+"}));
-      this.terms.push(new NumericTerm({number: flatBonus}, {flavor: "PowerfulCritical"}));
+    /* -------------------------------------------- */
+
+    /** @inheritdoc */
+    toMessage(messageData = {}, options = {}) {
+        messageData.flavor = messageData.flavor || this.options.flavor;
+        if (this.isCritical) {
+            const label = "CriticalHit";
+            messageData.flavor = messageData.flavor ? `${messageData.flavor} (${label})` : label;
+        }
+        options.rollMode = options.rollMode ?? this.options.rollMode;
+        return super.toMessage(messageData, options);
     }
 
-    // Re-compile the underlying formula
-    this._formula = this.constructor.getFormula(this.terms);
-  }
+    /* -------------------------------------------- */
+    /*  Configuration Dialog                        */
+    /* -------------------------------------------- */
 
-  /* -------------------------------------------- */
+    /**
+     * Create a Dialog prompt used to configure evaluation of an existing D20Roll instance.
+     * @param {object} data                     Dialog configuration data
+     * @param {string} [data.title]               The title of the shown dialog window
+     * @param {number} [data.defaultRollMode]     The roll mode that the roll mode select element should default to
+     * @param {string} [data.defaultCritical]     Should critical be selected as default
+     * @param {string} [data.template]            A custom path to an HTML template to use instead of the default
+     * @param {boolean} [data.allowCritical=true] Allow critical hit to be chosen as a possible damage mode
+     * @param {object} options                  Additional Dialog customization options
+     * @returns {Promise<D20Roll|null>}         A resulting D20Roll object constructed with the dialog, or null if the dialog was closed
+     */
+    async configureDialog({ title, defaultRollMode, defaultCritical = false, template, allowCritical = true, weaponData = null } = {}, options = {}) {
 
-  /** @inheritdoc */
-  toMessage(messageData={}, options={}) {
-    messageData.flavor = messageData.flavor || this.options.flavor;
-    if ( this.isCritical ) {
-      const label = "CriticalHit";
-      messageData.flavor = messageData.flavor ? `${messageData.flavor} (${label})` : label;
-    }
-    options.rollMode = options.rollMode ?? this.options.rollMode;
-    return super.toMessage(messageData, options);
-  }
+        // Render the Dialog inner HTML
+        const content = await renderTemplate(template ?? this.constructor.EVALUATION_TEMPLATE, {
+            formula: `${this.formula} + @bonus`,
+            defaultRollMode,
+            rollModes: CONFIG.Dice.rollModes,
+            tensionSelection: CONFIG.SGRPG.tensionSelection,
 
-  /* -------------------------------------------- */
-  /*  Configuration Dialog                        */
-  /* -------------------------------------------- */
+            canAddTension: weaponData?.canAddTension ?? false,
+            tensionDefault: weaponData?.tensionDefault ?? null
+        });
 
-  /**
-   * Create a Dialog prompt used to configure evaluation of an existing D20Roll instance.
-   * @param {object} data                     Dialog configuration data
-   * @param {string} [data.title]               The title of the shown dialog window
-   * @param {number} [data.defaultRollMode]     The roll mode that the roll mode select element should default to
-   * @param {string} [data.defaultCritical]     Should critical be selected as default
-   * @param {string} [data.template]            A custom path to an HTML template to use instead of the default
-   * @param {boolean} [data.allowCritical=true] Allow critical hit to be chosen as a possible damage mode
-   * @param {object} options                  Additional Dialog customization options
-   * @returns {Promise<D20Roll|null>}         A resulting D20Roll object constructed with the dialog, or null if the dialog was closed
-   */
-  async configureDialog({title, defaultRollMode, defaultCritical=false, template, allowCritical=true}={}, options={}) {
-
-    // Render the Dialog inner HTML
-    const content = await renderTemplate(template ?? this.constructor.EVALUATION_TEMPLATE, {
-      formula: `${this.formula} + @bonus`,
-      defaultRollMode,
-      rollModes: CONFIG.Dice.rollModes,
-    });
-
-    // Create the Dialog window and await submission of the form
-    return new Promise(resolve => {
-      new Dialog({
-        title,
-        content,
-        buttons: {
-          critical: {
-            condition: allowCritical,
-            label: "CriticalHit",
-            callback: html => resolve(this._onDialogSubmit(html, true))
-          },
-          normal: {
-            label: allowCritical ? "Normal" : "Roll",
-            callback: html => resolve(this._onDialogSubmit(html, false))
-          }
-        },
-        default: defaultCritical ? "critical" : "normal",
-        close: () => resolve(null)
-      }, options).render(true);
-    });
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Handle submission of the Roll evaluation configuration Dialog
-   * @param {jQuery} html             The submitted dialog content
-   * @param {boolean} isCritical      Is the damage a critical hit?
-   * @private
-   */
-  _onDialogSubmit(html, isCritical) {
-    const form = html[0].querySelector("form");
-
-    // Append a situational bonus term
-    if ( form.bonus.value ) {
-      const bonus = new Roll(form.bonus.value, this.data);
-      if ( !(bonus.terms[0] instanceof OperatorTerm) ) this.terms.push(new OperatorTerm({operator: "+"}));
-      this.terms = this.terms.concat(bonus.terms);
+        // Create the Dialog window and await submission of the form
+        return new Promise(resolve => {
+            new Dialog({
+                title,
+                content,
+                buttons: {
+                    critical: {
+                        condition: allowCritical,
+                        label: "CriticalHit",
+                        callback: html => resolve(this._onDialogSubmit(html, true, weaponData))
+                    },
+                    normal: {
+                        label: allowCritical ? "Normal" : "Roll",
+                        callback: html => resolve(this._onDialogSubmit(html, false, weaponData))
+                    }
+                },
+                default: defaultCritical ? "critical" : "normal",
+                close: () => resolve(null)
+            }, options).render(true);
+        });
     }
 
-    // Apply advantage or disadvantage
-    this.options.critical = isCritical;
-    this.options.rollMode = form.rollMode.value;
-    this.configureDamage();
-    return this;
-  }
+    /* -------------------------------------------- */
 
-  /* -------------------------------------------- */
+    /**
+     * Handle submission of the Roll evaluation configuration Dialog
+     * @param {jQuery} html             The submitted dialog content
+     * @param {boolean} isCritical      Is the damage a critical hit?
+     * @private
+     */
+    _onDialogSubmit(html, isCritical, weaponData) {
+        const form = html[0].querySelector("form");
 
-  /** @inheritdoc */
-  static fromData(data) {
-    const roll = super.fromData(data);
-    roll._formula = this.getFormula(roll.terms);
-    return roll;
-  }
+        // Append a situational bonus term
+        if (form.bonus.value) {
+            const bonus = new Roll(form.bonus.value, this);
+            if (!(bonus.terms[0] instanceof OperatorTerm)) this.terms.push(new OperatorTerm({ operator: "+" }));
+            this.terms = this.terms.concat(bonus.terms);
+        }
+
+        // And a tension die bonus
+        if (form.tensionBonus?.value === "yes") {
+            const td = game.sgrpg.getTensionDie();
+            const bonus = new Roll("1" + td, this);
+            if (!(bonus.terms[0] instanceof OperatorTerm)) this.terms.push(new OperatorTerm({ operator: "+" }));
+            this.terms = this.terms.concat(bonus.terms);
+        }
+
+        // Apply advantage or disadvantage
+        this.options.critical = isCritical;
+        this.options.rollMode = form.rollMode.value;
+        this.configureDamage();
+        return this;
+    }
+
+    /* -------------------------------------------- */
+
+    /** @inheritdoc */
+    static fromData(data) {
+        const roll = super.fromData(data);
+        roll._formula = this.getFormula(roll.terms);
+        return roll;
+    }
 }
